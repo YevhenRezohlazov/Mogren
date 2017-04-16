@@ -17,4 +17,9 @@ namespace Graphics
         const NativeTextureShaderParameterData data(value->getNativeTexture(), minFilter, magFilter, wrapU, wrapV);
         setValues(&data);
     }
+
+    ShaderParameterType ScalarShaderParameterSetter<Texture>::getType()
+    {
+        return ShaderParameterType(BaseShaderParameterType::Texture, -1, -1, -1);
+    }
 }

@@ -2,6 +2,7 @@
 #include "GLInclude.h"
 
 #include <Mogren/Framework/Logging/Logger.h>
+#include <assert.h>
 
 namespace Graphics
 {
@@ -23,6 +24,7 @@ namespace Graphics
             }
 
             Logging::Logger::writeWarning("OpenGL error at %s:%d: %s", fileName, line, errString.c_str());
+            assert(false && "OpenGL error. See log for details.");
         }
     }
 }

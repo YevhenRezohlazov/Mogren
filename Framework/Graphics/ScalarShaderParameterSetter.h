@@ -4,6 +4,9 @@
 #include "Texture.h"
 #include "PrimitiveTypes/TextureFilter.h"
 #include "PrimitiveTypes/TextureWrapMode.h"
+#include "PrimitiveTypes/ShaderParameterType.h"
+#include <type_traits>
+#include <assert.h>
 
 namespace Graphics
 {
@@ -21,6 +24,8 @@ namespace Graphics
         {
             setValues(&value);
         }
+
+        static ShaderParameterType getType();
     };
 
     typedef ScalarShaderParameterSetter<bool> BoolShaderParameterSetter;
@@ -40,6 +45,7 @@ namespace Graphics
             TextureWrapMode wrapU = TextureWrapMode::Clamp,
             TextureWrapMode wrapV = TextureWrapMode::Clamp);
 
+        static ShaderParameterType getType();
     private:
         ///
         /// Need to store texture to prevent texture instance from deletion
@@ -59,6 +65,30 @@ namespace Graphics
         std::unique_ptr<NativeShaderParameterSetter> nativeParameterSetter)
         : ShaderParameterSetter(std::move(nativeParameterSetter))
     {
+    }
+
+    template<typename TScalar>
+    inline ShaderParameterType ScalarShaderParameterSetter<TScalar>::getType()
+    {
+        auto baseParamType = BaseShaderParameterType::None;
+        if (std::is_floating_point<TScalar>::value)
+        {
+            baseParamType = BaseShaderParameterType::Float;
+        }
+        else if (std::is_same<TScalar, bool>::value)
+        {
+            baseParamType = BaseShaderParameterType::Boolean;
+        }
+        else if (std::is_integral<TScalar>::value)
+        {
+            baseParamType = BaseShaderParameterType::Integer;
+        }
+        else
+        {
+            assert("Unsupported vector value type.");
+        }
+
+        return ShaderParameterType(baseParamType, -1, -1, -1);
     }
 }
 

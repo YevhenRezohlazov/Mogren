@@ -52,14 +52,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="hlsl2glsl.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="HLSL2GLSL.exe">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="Processors\Mogren.Tools.ResCopy.Processors.csproj">
       <Project>{544591e8-9f72-443d-a70b-abf51c0c624c}</Project>
       <Name>Mogren.Tools.ResCopy.Processors</Name>

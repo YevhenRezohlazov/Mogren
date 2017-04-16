@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ShaderParameterSetter.h"
+#include "PrimitiveTypes/ShaderParameterType.h"
 #include <Mogren/Framework/Math/Matrix.h>
 
 namespace Graphics
@@ -15,12 +16,13 @@ namespace Graphics
         /// \param nativeParameterSetter The native shader parameter setter.
         explicit MatrixShaderParameterSetter(std::unique_ptr<NativeShaderParameterSetter> nativeParameterSetter);
 
-    public:
         ///
         /// Sets the given matrix as the shader parameter value
         /// \param value The matrix value
         ///
         void setValue(const Math::Matrix<NDimension, NDimension> &value);
+
+        static ShaderParameterType getType();
     };
 
     typedef MatrixShaderParameterSetter<2> Matrix2x2ShaderParameterSetter;
@@ -33,14 +35,16 @@ namespace Graphics
     {
     }
 
-    ///
-    /// Sets the given matrix as the shader parameter value
-    /// \param value The matrix value
-    ///
     template<uint8_t NDimension>
     inline void MatrixShaderParameterSetter<NDimension>::setValue(const Math::Matrix<NDimension, NDimension>& value)
     {
         setValues(&value[0][0]);
+    }
+
+    template<uint8_t NDimension>
+    inline ShaderParameterType MatrixShaderParameterSetter<NDimension>::getType()
+    {
+        return ShaderParameterType(BaseShaderParameterType::Float, NDimension, NDimension, -1);
     }
 }
 

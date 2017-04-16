@@ -54,7 +54,7 @@ namespace Graphics
 
         for (auto attrDesc : vertexBuffer.getVertexStructureDesc().getAttributeDescs())
         {
-            GLint attribLocation = shaderProgram.getAttributeLocation(attrDesc.getUsage(), attrDesc.getUsageIndex());
+            const GLint attribLocation = shaderProgram.getAttributeLocation(attrDesc.getAttributeName());
 
             if (attribLocation == -1)
             {

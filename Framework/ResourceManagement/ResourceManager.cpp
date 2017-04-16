@@ -185,6 +185,7 @@ namespace ResourceManagement
 
     std::shared_ptr<Resource> ResourceManager::loadResource(const std::string &path, ResourceLoader &resourceLoader)
     {
+        Logging::Logger::writeInfo("Loading resource from %s", path.c_str());
         auto resultResource = resourceLoader.loadResource(*openResourceStream(path));
         std::lock_guard<std::mutex> lock(mLoadedResourcesMutex);
         return mLoadedResources[path] = std::move(resultResource);

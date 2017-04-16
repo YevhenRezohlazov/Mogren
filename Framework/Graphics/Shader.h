@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "MatrixShaderParameterSetter.h"
+#include "PrimitiveTypes/ShaderParameterType.h"
 
 #include <memory>
 #include <unordered_map>
@@ -67,42 +68,12 @@ namespace Graphics
 
     protected:
         ///
-        /// Sets the shader parameter which will be set (if not null) with world transformation value (from scene item transformation).
-        ///
-        void setWorldTransformParameterName(const std::string & name);
-
-        ///
-        /// Sets the shader parameter which will be set (if not null) with camera view transformation value.
-        ///
-        void setViewTransformParameterName(const std::string & name);
-
-        ///
-        /// Sets the shader parameter which will be set (if not null) with camera projection transformation value.
-        ///
-        void setProjectionTransformParameterName(const std::string & name);
-
-        ///
-        /// Sets the shader parameter which will be set (if not null) with multiplied world and view transformation matrices.
-        ///
-        void setWorldViewTransformParameterName(const std::string & name);
-
-        ///
-        /// Sets the shader parameter which will be set (if not null) with multiplied view and projection transformation matrices.
-        ///
-        void setViewProjectionTransformParameterName(const std::string & name);
-
-        ///
-        /// Sets the shader parameter which will be set (if not null) with multiplied world, view and projection transformation matrices.
-        ///
-        void setWorldViewProjectionTransformParameterName(const std::string & name);
-
-        ///
         /// Gets the shader parameter with specified name.
         /// InvalidOperationException is thrown when the parameter with such a name hasn't been found.
         ///
         /// \param name The parameter name.
         /// \returns ShaderParameter instance.
-        ShaderParameterSetter* getParameterSetter(const std::string &name) const;
+        ShaderParameterSetter* getParameterSetter(const std::string &name, const ShaderParameterType & type) const;
 
         ///
         /// Gets the shader parameter with specified name.
@@ -126,7 +97,7 @@ namespace Graphics
         ///
         /// The shader parameter setters map (name -> parameter)
         ///
-        std::unordered_map<std::string, std::unique_ptr<ShaderParameterSetter>> mParameterSetters;
+        mutable std::unordered_map<std::string, std::unique_ptr<ShaderParameterSetter>> mParameterSetters;
 
         ///
         /// The shader parameter which will be set (if not null) with world transformation value (from scene item transformation).
@@ -163,7 +134,7 @@ namespace Graphics
     template<typename TSetter>
     inline TSetter * Shader::getParameterSetter(const std::string & name) const
     {
-        return dynamic_cast<TSetter*>(getParameterSetter(name));
+        return dynamic_cast<TSetter*>(getParameterSetter(name, TSetter::getType()));
     }
 }
 

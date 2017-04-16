@@ -59,13 +59,13 @@ namespace ResCopy
                     writer.Write(ch.Region.X / mapWidth);
 
                     // 4 bytes float - region position y
-                    writer.Write(ch.Region.Y / mapWidth);
+                    writer.Write(ch.Region.Y / mapHeight);
 
                     // 4 bytes float - region width
                     writer.Write(ch.Region.Width / mapWidth);
 
                     // 4 bytes float - region height
-                    writer.Write(ch.Region.Height / mapWidth);
+                    writer.Write(ch.Region.Height / mapHeight);
                 }
 
                 var mapStream = new MemoryStream();

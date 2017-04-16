@@ -3,19 +3,14 @@
 namespace Graphics
 {
     VertexAttributeDesc::VertexAttributeDesc(
-        VertexAttributeUsage usage, int usageIndex, VertexAttributeType type, int offset)
-        : mUsage(usage), mUsageIndex(usageIndex), mType(type), mOffset(offset)
+        const std::string& attributeName, VertexAttributeType type, int offset)
+        : mAttributeName(attributeName), mType(type), mOffset(offset)
     {
     }
 
-    Graphics::VertexAttributeUsage VertexAttributeDesc::getUsage() const
+    const std::string & VertexAttributeDesc::getAttributeName() const
     {
-        return mUsage;
-    }
-
-    int VertexAttributeDesc::getUsageIndex() const
-    {
-        return mUsageIndex;
+        return mAttributeName;
     }
 
     Graphics::VertexAttributeType VertexAttributeDesc::getType() const

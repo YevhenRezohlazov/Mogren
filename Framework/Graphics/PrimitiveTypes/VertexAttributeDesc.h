@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "VertexAttributeType.h"
-#include "VertexAttributeUsage.h"
+#include <string>
 
 namespace Graphics
 {
@@ -11,7 +11,7 @@ namespace Graphics
     class VertexAttributeDesc
     {
     private:
-        VertexAttributeUsage mUsage;
+        std::string mAttributeName;
         int mUsageIndex;
         VertexAttributeType mType;
         int mOffset;
@@ -19,23 +19,17 @@ namespace Graphics
     public:
         ///
         /// Initializes a new instance of VertexAttributeDesc class.
-        /// \param usage Vertex attribute usage
-        /// \param usageIndex Vertex attribute usage index (such as 2 for POSITION2 or 0 for COLOR0 or just COLOR)
+        /// \param attributeName Vertex attribute name
         /// \param type Vertex attribute type
         /// \param offset Offset of the attribute data in the vertex structure
         ///
-        VertexAttributeDesc(VertexAttributeUsage usage, int usageIndex, VertexAttributeType type, int offset);
+        VertexAttributeDesc(const std::string& attributeName, VertexAttributeType type, int offset);
 
         ///
-        /// Gets the vertex attribute usage
+        /// Gets the vertex attribute name
         ///
-        VertexAttributeUsage getUsage() const;
-
-        ///
-        /// Gets the vertex attribute usage index (such as 2 for POSITION2 or 0 for COLOR0 or just COLOR)
-        ///
-        int getUsageIndex() const;
-
+        const std::string& getAttributeName() const;
+        
         ///
         /// Gets the vertex attribute type
         ///

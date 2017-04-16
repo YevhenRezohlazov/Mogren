@@ -43,30 +43,9 @@ namespace Graphics
             assert(false && "Given resource is not a compiled Mogren shader.");
         }
 
-        std::unordered_map<std::string, std::string> options;
-        auto optionsCount = reader.read<uint32_t>();
-
-        for (uint32_t i = 0; i < optionsCount; ++i)
-        {
-            const auto &key = readASCIIString(reader);
-            auto value = readASCIIString(reader);
-
-            options[key] = std::move(value);
-        }
-
-        std::unordered_map<std::string, ShaderParameterType> uniforms;
-        auto uniformsCount = reader.read<uint32_t>();
-
-        for (uint32_t i = 0; i < uniformsCount; ++i)
-        {
-            auto name = readASCIIString(reader);
-            ShaderParameterType type = reader.read<ShaderParameterType>();
-            uniforms.insert(std::make_pair(std::move(name), type));
-        }
-
         auto nativeProgram = Common::getImpl<NativeGraphicsInterface>().compileShaderProgram(
             stream, stream.getLength() - stream.getPosition());
         assert(nativeProgram);
-        return std::make_unique<ShaderProgram>(options, uniforms, std::move(nativeProgram));
+        return std::make_unique<ShaderProgram>(std::move(nativeProgram));
     }
 }
