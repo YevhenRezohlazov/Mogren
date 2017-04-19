@@ -10,8 +10,8 @@
 #include <Mogren/Framework/Graphics/TextureLoader.h>
 #include <Mogren/Framework/Graphics/Text/FontLoader.h>
 #include <Mogren/Framework/Audio/SoundLoader.h>
+#include <Mogren/Framework/Localization/LocalizedStringsLoader.h>
 #include <assert.h>
-//#include <future>
 
 namespace App
 {
@@ -28,6 +28,7 @@ namespace App
         getResourceManager().addResourceLoader(std::make_unique<Graphics::TextureLoader>());
         getResourceManager().addResourceLoader(std::make_unique<Graphics::Text::FontLoader>());
         getResourceManager().addResourceLoader(std::make_unique<Audio::SoundLoader>());
+        getResourceManager().addResourceLoader(std::make_unique<Localization::LocalizedStringsLoader>());
     }
 
     void Application::onTouch(Common::TouchAction touchAction, const Math::Point2DI &position, int pointerId)
