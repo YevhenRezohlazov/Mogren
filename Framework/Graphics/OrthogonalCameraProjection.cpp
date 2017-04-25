@@ -20,7 +20,7 @@ namespace Graphics
         return mProjectionMatrix;
     }
 
-    void OrthogonalCameraProjection::updateViewport(Viewport newViewport)
+    void OrthogonalCameraProjection::updateViewport(const Viewport & newViewport)
     {
         mAspectRatio = newViewport.mWidth / float(newViewport.mHeight);
         mDataChnaged = true;

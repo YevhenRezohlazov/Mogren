@@ -23,7 +23,7 @@ namespace Graphics
         /// Called when camera viewport has been changed.
         ///
         /// \param newViewport The new viewport.
-        virtual void updateViewport(Viewport newViewport);
+        virtual void updateViewport(const Viewport & newViewport);
 
         ///
         /// Returns the current projection transformation version

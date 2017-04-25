@@ -12,7 +12,7 @@ namespace Graphics
         return mProjectionMatrix;
     }
 
-    void CameraProjection::updateViewport(Viewport newViewport)
+    void CameraProjection::updateViewport(const Viewport & newViewport)
     {
     }
 

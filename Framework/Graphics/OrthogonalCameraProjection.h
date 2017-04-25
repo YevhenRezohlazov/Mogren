@@ -57,7 +57,7 @@ namespace Graphics
 
         virtual const Math::Matrix4x4& getProjectionMatrix() const;
 
-        virtual void updateViewport(Viewport newViewport);
+        virtual void updateViewport(const Viewport & newViewport);
 
     private:
         void updateMatrix();
