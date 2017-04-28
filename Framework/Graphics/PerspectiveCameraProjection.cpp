@@ -48,6 +48,11 @@ namespace Graphics
         return *this;
     }
 
+    float PerspectiveCameraProjection::getAngleOfView() const
+    {
+        return mAngleOfView;
+    }
+
     void PerspectiveCameraProjection::updateMatrix()
     {
         const float f = 1.0f / Math::tan(mAngleOfView * 0.5f);

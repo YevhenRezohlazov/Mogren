@@ -25,6 +25,8 @@ namespace Graphics
 
         PerspectiveCameraProjection& setFarPlane(float farPlane);
 
+        float getAngleOfView() const;
+
     private:
         void updateMatrix();
 
