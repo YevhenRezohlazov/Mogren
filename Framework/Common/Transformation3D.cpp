@@ -16,6 +16,7 @@ namespace Common
         mMatrix.m30 = position.x;
         mMatrix.m31 = position.y;
         mMatrix.m32 = position.z;
+        incrementVersion();
         return *this;
     }
 }
