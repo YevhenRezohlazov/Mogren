@@ -22,33 +22,33 @@ namespace Math
         ///
         /// Initializes a new instance of the Vector struct.
         ///
-        Vector();
+        constexpr Vector();
 
         ///
         /// Initializes a new instance of the Vector struct.
         ///
-        Vector(const Vector<TValue, Dimension - 1> &base, TValue last);
+        constexpr Vector(const Vector<TValue, Dimension - 1> &base, TValue last);
 
         ///
         /// Initializes a new instance of the Vector struct.
         ///
-        explicit Vector(TValue x);
+        constexpr explicit Vector(TValue x);
 
         ///
         /// Initializes a new instance of the Vector struct.
         ///
         template <typename TOtherValue>
-        explicit Vector(const Vector<TOtherValue, Dimension>& src);
+        constexpr explicit Vector(const Vector<TOtherValue, Dimension>& src);
 
         ///
         /// Returns the vector containing all this vector coordinates except the last one
         ///
-        Vector<TValue, Dimension - 1> getSubvector() const;
+        constexpr Vector<TValue, Dimension - 1> getSubvector() const;
 
         ///
         /// Gets vector length.
         ///
-        TValue getLength() const;
+        constexpr TValue getLength() const;
 
         ///
         /// Normalizes vector.
@@ -60,16 +60,16 @@ namespace Math
         /// Gets normalized vector.
         ///
         /// \returns The normalized vector.
-        Vector<TValue, Dimension> getNormalized() const;
+        constexpr Vector<TValue, Dimension> getNormalized() const;
 
         ///
         /// Returns dot product of this and given second vector.
         ///
         /// \returns Dot product.
         /// \param other Second vector.
-        TValue calculateDotProduct(Vector<TValue, Dimension> other) const;
+        constexpr TValue calculateDotProduct(Vector<TValue, Dimension> other) const;
 
-        const TValue& operator[](uint8_t index) const
+        constexpr const TValue& operator[](uint8_t index) const
         {
             if (index >= Dimension)
             {
@@ -89,7 +89,7 @@ namespace Math
             return mComponents[index];
         }
 
-        Vector<TValue, Dimension> operator-() const
+        constexpr Vector<TValue, Dimension> operator-() const
         {
             Vector<TValue, Dimension> res;
 
@@ -101,7 +101,7 @@ namespace Math
             return res;
         }
 
-        Vector<TValue, Dimension> operator+(const Vector<TValue, Dimension> &other) const
+        constexpr Vector<TValue, Dimension> operator+(const Vector<TValue, Dimension> &other) const
         {
             Vector<TValue, Dimension> res;
 
@@ -113,7 +113,7 @@ namespace Math
             return res;
         }
 
-        Vector<TValue, Dimension> operator-(const Vector<TValue, Dimension> &other) const
+        constexpr Vector<TValue, Dimension> operator-(const Vector<TValue, Dimension> &other) const
         {
             Vector<TValue, Dimension> res;
 
@@ -125,7 +125,7 @@ namespace Math
             return res;
         }
 
-        Vector<TValue, Dimension> operator*(const Vector<TValue, Dimension> &other) const
+        constexpr Vector<TValue, Dimension> operator*(const Vector<TValue, Dimension> &other) const
         {
             Vector<TValue, Dimension> res;
 
@@ -137,7 +137,7 @@ namespace Math
             return res;
         }
 
-        Vector<TValue, Dimension> operator/(const Vector<TValue, Dimension> &other) const
+        constexpr Vector<TValue, Dimension> operator/(const Vector<TValue, Dimension> &other) const
         {
             Vector<TValue, Dimension> res;
 
@@ -149,7 +149,7 @@ namespace Math
             return res;
         }
 
-        Vector<TValue, Dimension> operator*(float c) const
+        constexpr Vector<TValue, Dimension> operator*(float c) const
         {
             Vector<TValue, Dimension> res;
 
@@ -161,7 +161,7 @@ namespace Math
             return res;
         }
 
-        Vector<TValue, Dimension> operator/(float c) const
+        constexpr Vector<TValue, Dimension> operator/(float c) const
         {
             Vector<TValue, Dimension> res;
 
@@ -244,7 +244,7 @@ namespace Math
     /// Initializes a new instance of the Vector struct.
     ///
     template<typename TValue, uint8_t Dimension>
-    inline Vector<TValue, Dimension>::Vector()
+    constexpr inline Vector<TValue, Dimension>::Vector()
     {
         memset(mComponents, 0, sizeof(mComponents));
     }
@@ -253,7 +253,7 @@ namespace Math
     /// Initializes a new instance of the Vector struct.
     ///
     template<typename TValue, uint8_t Dimension>
-    inline Vector<TValue, Dimension>::Vector(const Vector<TValue, Dimension - 1>& base, TValue last)
+    constexpr inline Vector<TValue, Dimension>::Vector(const Vector<TValue, Dimension - 1>& base, TValue last)
     {
         memcpy(mComponents, base.mComponents, sizeof(base.mComponents));
         mComponents[Dimension - 1] = last;
@@ -263,7 +263,7 @@ namespace Math
     /// Initializes a new instance of the Vector struct.
     ///
     template<typename TValue, uint8_t Dimension>
-    inline Vector<TValue, Dimension>::Vector(TValue x)
+    constexpr inline Vector<TValue, Dimension>::Vector(TValue x)
     {
         for (uint8_t i = 0; i < Dimension; ++i)
         {
@@ -276,7 +276,7 @@ namespace Math
     ///
     template<typename TValue, uint8_t Dimension>
     template<typename TOtherValue>
-    inline Vector<TValue, Dimension>::Vector(const Vector<TOtherValue, Dimension>& src)
+    constexpr inline Vector<TValue, Dimension>::Vector(const Vector<TOtherValue, Dimension>& src)
     {
         for (uint8_t i = 0; i < Dimension; ++i)
         {
@@ -288,7 +288,7 @@ namespace Math
     /// Returns the vector containing all this vector coordinates except the last one
     ///
     template<typename TValue, uint8_t Dimension>
-    inline Vector<TValue, Dimension - 1> Vector<TValue, Dimension>::getSubvector() const
+    constexpr inline Vector<TValue, Dimension - 1> Vector<TValue, Dimension>::getSubvector() const
     {
         Vector<TValue, Dimension - 1> res;
         memcpy(res.mComponents, mComponents, sizeof(res.mComponents));
@@ -299,7 +299,7 @@ namespace Math
     /// Gets vector length.
     ///
     template<typename TValue, uint8_t Dimension>
-    inline TValue Vector<TValue, Dimension>::getLength() const
+    constexpr inline TValue Vector<TValue, Dimension>::getLength() const
     {
         TValue sum = 0;
 
@@ -333,7 +333,7 @@ namespace Math
     ///
     /// \returns The normalized vector.
     template<typename TValue, uint8_t Dimension>
-    inline Vector<TValue, Dimension> Vector<TValue, Dimension>::getNormalized() const
+    constexpr inline Vector<TValue, Dimension> Vector<TValue, Dimension>::getNormalized() const
     {
         Vector<TValue, Dimension> res;
 
@@ -353,7 +353,7 @@ namespace Math
     /// \returns Dot product.
     /// \param other Second vector.
     template<typename TValue, uint8_t Dimension>
-    inline TValue Vector<TValue, Dimension>::calculateDotProduct(Vector<TValue, Dimension> other) const
+    constexpr inline TValue Vector<TValue, Dimension>::calculateDotProduct(Vector<TValue, Dimension> other) const
     {
         TValue res = 0;
 

@@ -55,14 +55,14 @@ namespace Math
         ///
         /// Initializes a new instance of the Vector struct.
         ///
-        Vector() : x(), y(), z()
+        constexpr Vector() : x(), y(), z()
         {
         }
 
         ///
         /// Initializes a new instance of the Vector2D struct.
         ///
-        Vector(const Vector<TValue, 2> &base, TValue z)
+        constexpr Vector(const Vector<TValue, 2> &base, TValue z)
             : x(base.x), y(base.y), z(z)
         {
         }
@@ -73,7 +73,7 @@ namespace Math
         /// \param x The x coordinate (width).
         /// \param y The y coordinate (height).
         /// \param z The z coordinate (depth).
-        Vector(TValue x, TValue y, TValue z)
+        constexpr Vector(TValue x, TValue y, TValue z)
             : x(x), y(y), z(z)
         {
         }
@@ -82,7 +82,7 @@ namespace Math
         /// Initializes a new instance of the Vector3D struct.
         ///
         /// \param value The x and y coordinates value.
-        explicit Vector(TValue value) : x(value), y(value), z(value)
+        constexpr explicit Vector(TValue value) : x(value), y(value), z(value)
         {
         }
 
@@ -90,7 +90,7 @@ namespace Math
         /// Initializes a new instance of the Vector3D struct.
         ///
         template <typename TOtherValue>
-        explicit Vector(const Vector<TOtherValue, 3>& src)
+        constexpr explicit Vector(const Vector<TOtherValue, 3>& src)
             : x((TValue)src.x), y((TValue)src.y), z((TValue)src.z)
         {
         }
@@ -98,7 +98,7 @@ namespace Math
         ///
         /// Returns the vector containing all this vector coordinates except the last one
         ///
-        Vector<TValue, 2> getSubvector() const
+        constexpr Vector<TValue, 2> getSubvector() const
         {
             return Vector<TValue, 2>(x, y);
         }
@@ -106,7 +106,7 @@ namespace Math
         ///
         /// Gets vector length.
         ///
-        TValue getLength() const
+        constexpr TValue getLength() const
         {
             return static_cast<TValue>(sqrt(x * x + y * y + z * z));
         }
@@ -129,7 +129,7 @@ namespace Math
         /// Gets normalized vector.
         ///
         /// \returns The normalized vector.
-        Vector<TValue, 3> getNormalized() const
+        constexpr Vector<TValue, 3> getNormalized() const
         {
             Vector<TValue, 3> res;
 
@@ -146,7 +146,7 @@ namespace Math
         ///
         /// \returns Dot product.
         /// \param other Second vector.
-        TValue calculateDotProduct(const Vector<TValue, 3> &other) const
+        constexpr TValue calculateDotProduct(const Vector<TValue, 3> &other) const
         {
             return x * other.x + y * other.y + z * other.z;
         }
@@ -156,12 +156,12 @@ namespace Math
         ///
         /// \param other The second vector.
         ///
-        Vector<TValue, 3> calculateCrossProduct(const Vector<TValue, 3> &other) const
+        constexpr Vector<TValue, 3> calculateCrossProduct(const Vector<TValue, 3> &other) const
         {
             return Vector<TValue, 3>(y * other.z - other.y * z, other.x * z - x * other.z, x * other.y - other.x * y);
         }
 
-        const TValue& operator[](uint8_t index) const
+        constexpr const TValue& operator[](uint8_t index) const
         {
             if (index >= 3)
             {
@@ -181,37 +181,37 @@ namespace Math
             return *(&x + index);
         }
 
-        Vector operator-() const
+        constexpr Vector operator-() const
         {
             return Vector<TValue, 3>(-x, -y, -z);
         }
 
-        Vector operator+(const Vector &other) const
+        constexpr Vector operator+(const Vector &other) const
         {
             return Vector<TValue, 3>(x + other.x, y + other.y, z + other.z);
         }
 
-        Vector operator-(const Vector &other) const
+        constexpr Vector operator-(const Vector &other) const
         {
             return Vector<TValue, 3>(x - other.x, y - other.y, z - other.z);
         }
 
-        Vector operator*(const Vector &other) const
+        constexpr Vector operator*(const Vector &other) const
         {
             return Vector<TValue, 3>(x * other.x, y * other.y, z * other.z);
         }
 
-        Vector operator/(const Vector &other) const
+        constexpr Vector operator/(const Vector &other) const
         {
             return Vector<TValue, 3>(x / other.x, y / other.y, z / other.z);
         }
 
-        Vector operator*(float c) const
+        constexpr Vector operator*(float c) const
         {
             return Vector<TValue, 3>((TValue)(x * c), (TValue)(y * c), (TValue)(z * c));
         }
 
-        Vector operator/(float c) const
+        constexpr Vector operator/(float c) const
         {
             return Vector<TValue, 3>((TValue)(x / c), (TValue)(y / c), (TValue)(z / c));
         }

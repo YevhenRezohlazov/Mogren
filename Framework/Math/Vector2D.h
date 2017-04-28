@@ -41,14 +41,14 @@ namespace Math
         ///
         /// Initializes a new instance of the Vector2D struct.
         ///
-        Vector() : x(), y()
+        constexpr Vector() : x(), y()
         {
         }
 
         ///
         /// Initializes a new instance of the Vector2D struct.
         ///
-        Vector(const Vector<TValue, 1> &base, TValue y)
+        constexpr Vector(const Vector<TValue, 1> &base, TValue y)
             : x(base[0]), y(y)
         {
         }
@@ -58,7 +58,7 @@ namespace Math
         ///
         /// \param x The x coordinate (width).
         /// \param y The y coordinate (height).
-        Vector(TValue x, TValue y) : x(x), y(y)
+        constexpr Vector(TValue x, TValue y) : x(x), y(y)
         {
         }
 
@@ -66,7 +66,7 @@ namespace Math
         /// Initializes a new instance of the Vector2D struct.
         ///
         /// \param value The x and y coordinates value.
-        explicit Vector(TValue value) : x(value), y(value)
+        constexpr explicit Vector(TValue value) : x(value), y(value)
         {
         }
 
@@ -74,7 +74,7 @@ namespace Math
         /// Initializes a new instance of the Vector2D struct.
         ///
         template <typename TOtherValue>
-        explicit Vector(const Vector<TOtherValue, 2>& src)
+        constexpr explicit Vector(const Vector<TOtherValue, 2>& src)
             : x((TValue)src.x), y((TValue)src.y)
         {
         }
@@ -83,7 +83,7 @@ namespace Math
         /// Creates vector that makes given angle with X axis and has length 1.0.
         /// @param angle The angle in radians.
         ///
-        static Vector<TValue, 2> fromAngle(float angle)
+        constexpr static Vector<TValue, 2> fromAngle(float angle)
         {
             return Vector<TValue, 2>((TValue)cos(angle), (TValue)sin(angle));
         }
@@ -93,7 +93,7 @@ namespace Math
         /// @param angle The angle in radians.
         /// @param length The vector length.
         ///
-        static Vector<TValue, 2> fromAngleAndLength(float angle, TValue length)
+        constexpr static Vector<TValue, 2> fromAngleAndLength(float angle, TValue length)
         {
             return Vector<TValue, 2>((TValue)(cos(angle) * length), (TValue)(sin(angle) * length));
         }
@@ -101,7 +101,7 @@ namespace Math
         ///
         /// Returns the vector containing all this vector coordinates except the last one
         ///
-        Vector<TValue, 1> getSubvector() const
+        constexpr Vector<TValue, 1> getSubvector() const
         {
             return Vector<TValue, 1>(x);
         }
@@ -109,7 +109,7 @@ namespace Math
         ///
         /// Gets vector length.
         ///
-        TValue getLength() const
+        constexpr TValue getLength() const
         {
             return static_cast<TValue>(sqrt(x * x + y * y));
         }
@@ -132,7 +132,7 @@ namespace Math
         /// Gets normalized vector.
         ///
         /// \returns The normalized vector.
-        Vector<TValue, 2> getNormalized() const
+        constexpr Vector<TValue, 2> getNormalized() const
         {
             Vector<TValue, 2> res;
             TValue len = getLength();
@@ -148,7 +148,7 @@ namespace Math
         ///
         /// \returns Dot product.
         /// \param other Second vector.
-        float calculateDotProduct(Vector<TValue, 2> other) const
+        constexpr float calculateDotProduct(Vector<TValue, 2> other) const
         {
             return x * other.x + y * other.y;
         }
@@ -156,12 +156,12 @@ namespace Math
         ///
         /// Returns the angle between this vector and X axis.
         ///
-        float getAngle() const
+        constexpr float getAngle() const
         {
             return Math::atan2(y, x);
         }
 
-        const TValue& operator[](uint8_t index) const
+        constexpr const TValue& operator[](uint8_t index) const
         {
             if (index >= 2)
             {
@@ -181,37 +181,37 @@ namespace Math
             return index == 0 ? x : y;
         }
 
-        Vector<TValue, 2> operator-() const
+        constexpr Vector<TValue, 2> operator-() const
         {
             return Vector<TValue, 2>(-x, -y);
         }
 
-        Vector<TValue, 2> operator+(const Vector<TValue, 2> &other) const
+        constexpr Vector<TValue, 2> operator+(const Vector<TValue, 2> &other) const
         {
             return Vector<TValue, 2>(x + other.x, y + other.y);
         }
 
-        Vector<TValue, 2> operator-(const Vector<TValue, 2> &other) const
+        constexpr Vector<TValue, 2> operator-(const Vector<TValue, 2> &other) const
         {
             return Vector<TValue, 2>(x - other.x, y - other.y);
         }
 
-        Vector<TValue, 2> operator*(const Vector<TValue, 2> &other) const
+        constexpr Vector<TValue, 2> operator*(const Vector<TValue, 2> &other) const
         {
             return Vector<TValue, 2>(x * other.x, y * other.y);
         }
 
-        Vector<TValue, 2> operator/(const Vector<TValue, 2> &other) const
+        constexpr Vector<TValue, 2> operator/(const Vector<TValue, 2> &other) const
         {
             return Vector<TValue, 2>(x / other.x, y / other.y);
         }
 
-        Vector<TValue, 2> operator*(float c) const
+        constexpr Vector<TValue, 2> operator*(float c) const
         {
             return Vector<TValue, 2>((TValue)(x * c), (TValue)(y * c));
         }
 
-        Vector<TValue, 2> operator/(float c) const
+        constexpr Vector<TValue, 2> operator/(float c) const
         {
             return Vector<TValue, 2>((TValue)(x / c), (TValue)(y / c));
         }
