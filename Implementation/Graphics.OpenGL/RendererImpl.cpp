@@ -120,6 +120,7 @@ namespace Graphics
             break;
         }
 
+        CHECK_GL_ERROR();
         glDrawElements(elemType, geometry.getIndexCount(), GL_UNSIGNED_SHORT, BUFFER_OFFSET(geometry.getIndexOffset() * sizeof(uint16_t)));
         CHECK_GL_ERROR();
 

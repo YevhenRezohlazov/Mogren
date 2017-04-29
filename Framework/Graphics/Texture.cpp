@@ -6,9 +6,9 @@
 namespace Graphics
 {
     Texture::Texture(std::unique_ptr<NativeTexture> nativeTexture)
-        : Texture(std::move(nativeTexture),
-            Math::Size2DI(mNativeTexture->getWidth(), mNativeTexture->getHeight()))
+        : mNativeTexture(std::move(nativeTexture))
     {
+        mSize = Math::Size2DI(nativeTexture->getWidth(), nativeTexture->getHeight());
     }
     
     Texture::Texture(std::unique_ptr<NativeTexture> nativeTexture, const Math::Size2DI & size)
@@ -17,7 +17,7 @@ namespace Graphics
     }
 
     Texture::Texture(const Math::Size2DI & size, const uint8_t * data, bool autoFinalize)
-        : Texture(Common::getImpl<NativeGraphicsInterface>().createTexture(size, data))
+        : Texture(Common::getImpl<NativeGraphicsInterface>().createTexture(size, data), size)
     {
         if (autoFinalize)
         {
