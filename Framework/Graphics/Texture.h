@@ -27,6 +27,13 @@ namespace Graphics
         Texture(std::unique_ptr<NativeTexture> nativeTexture, const Math::Size2DI & size);
 
         ///
+        /// Initializes a new instance of the Texture class.
+        ///
+        /// \param size Texture size.
+        /// \param data Texture data. width * height * 4 bytes, RGBA
+        explicit Texture(const Math::Size2DI & size, const uint8_t * data, bool autoFinalize = true);
+
+        ///
         /// Gets the native texture instance.
         ///
         const NativeTexture &getNativeTexture() const;

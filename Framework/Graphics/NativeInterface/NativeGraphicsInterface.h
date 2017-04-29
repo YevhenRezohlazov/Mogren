@@ -56,6 +56,12 @@ namespace Graphics
         virtual std::unique_ptr<NativeTexture> loadTexture(IO::InputStream &stream, uint32_t dataLength) = 0;
 
         ///
+        /// Creates testure with dirty data to be filled by user
+        /// \param data Texture data. width * height * 4 bytes, RGBA
+        ///
+        virtual std::unique_ptr<NativeTexture> createTexture(const Math::Size2DI & size, const uint8_t * data) = 0;
+
+        ///
         /// Compiles the shader from specified shader stream.
         ///
         /// \param stream The shader data stream.

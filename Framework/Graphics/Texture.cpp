@@ -1,5 +1,7 @@
 ﻿#include "Texture.h"
 #include "NativeInterface/NativeTexture.h"
+#include <Mogren/Framework/Common/ImplementationProvider.h>
+#include <Mogren/Framework/Graphics/NativeInterface/NativeGraphicsInterface.h>
 
 namespace Graphics
 {
@@ -12,6 +14,15 @@ namespace Graphics
     Texture::Texture(std::unique_ptr<NativeTexture> nativeTexture, const Math::Size2DI & size)
         : mNativeTexture(std::move(nativeTexture)), mSize(size)
     {
+    }
+
+    Texture::Texture(const Math::Size2DI & size, const uint8_t * data, bool autoFinalize)
+        : Texture(Common::getImpl<NativeGraphicsInterface>().createTexture(size, data))
+    {
+        if (autoFinalize)
+        {
+            finalize();
+        }
     }
 
     const NativeTexture& Texture::getNativeTexture() const

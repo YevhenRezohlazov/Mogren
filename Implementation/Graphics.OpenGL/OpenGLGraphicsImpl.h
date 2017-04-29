@@ -30,6 +30,8 @@ namespace Graphics
 
         virtual std::unique_ptr<NativeTexture> loadTexture(IO::InputStream &stream, uint32_t dataLength) override;
 
+        virtual std::unique_ptr<NativeTexture> createTexture(const Math::Size2DI & size, const uint8_t * data) override;
+
         virtual std::unique_ptr<NativeShaderProgram> compileShaderProgram(IO::InputStream &stream, uint32_t dataLength) override;
 
         virtual std::tuple< std::unique_ptr<NativeRenderTarget>, std::unique_ptr<NativeTexture> >

@@ -4,6 +4,8 @@
 
 #include <Mogren/Framework/Graphics/NativeInterface/NativeTexture.h>
 #include <Mogren/Framework/IO/InputStream.h>
+#include <Mogren/Framework/Math/Vector2D.h>
+#include <vector>
 
 namespace Graphics
 {
@@ -11,6 +13,7 @@ namespace Graphics
     {
     public:
         TextureImpl(IO::InputStream & stream, uint32_t dataLength);
+        TextureImpl(const Math::Size2DI & size, const uint8_t * data);
 
         const GLTexture& getGLTexture() const;
 
@@ -25,7 +28,7 @@ namespace Graphics
         int mWidth;
         int mHeight;
 
-        void * mSourcePixels;
+        std::vector<uint8_t> mSourcePixels;
         int mChannelsCount;
     };
 }

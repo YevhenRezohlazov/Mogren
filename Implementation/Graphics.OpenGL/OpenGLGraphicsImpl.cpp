@@ -37,6 +37,11 @@ namespace Graphics
         return std::make_unique<TextureImpl>(stream, dataLength);
     }
 
+    std::unique_ptr<NativeTexture> OpenGLGraphicsImpl::createTexture(const Math::Size2DI & size, const uint8_t * data)
+    {
+        return std::make_unique<TextureImpl>(size, data);
+    }
+
     std::unique_ptr<NativeShaderProgram> OpenGLGraphicsImpl::compileShaderProgram(IO::InputStream & stream, uint32_t dataLength)
     {
         return std::make_unique<ShaderProgramImpl>(stream);

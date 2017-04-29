@@ -10,9 +10,19 @@ namespace Graphics
     {
         std::vector<stbi_uc> dataVector(dataLength);
         stream.read(dataVector.data(), dataLength);
-        mSourcePixels = stbi_load_from_memory(dataVector.data(), dataLength, &mWidth, &mHeight, &mChannelsCount, 0);
-        assert(mSourcePixels);
+        auto sourcePixels = stbi_load_from_memory(dataVector.data(), dataLength, &mWidth, &mHeight, &mChannelsCount, 0);
+        mSourcePixels.insert(mSourcePixels.begin(), (uint8_t*)sourcePixels, (uint8_t*)sourcePixels + (mWidth * mHeight * mChannelsCount));
+        assert(sourcePixels);
+        stbi_image_free(sourcePixels);
+    }
 
+    TextureImpl::TextureImpl(const Math::Size2DI & size, const uint8_t * data)
+        : mGLTexture(GL_TEXTURE_2D)
+        , mWidth(size.width)
+        , mHeight(size.height)
+        , mChannelsCount(4)
+    {
+        mSourcePixels.insert(mSourcePixels.begin(), data, data + (mWidth * mHeight * 4));
     }
 
     const GLTexture& TextureImpl::getGLTexture() const
@@ -48,11 +58,9 @@ namespace Graphics
 
         glBindTexture(GL_TEXTURE_2D, textureId);
         CHECK_GL_ERROR();
-        glTexImage2D(GL_TEXTURE_2D, 0, format, mWidth, mHeight, 0, format, GL_UNSIGNED_BYTE, mSourcePixels);
+        glTexImage2D(GL_TEXTURE_2D, 0, format, mWidth, mHeight, 0, format, GL_UNSIGNED_BYTE, mSourcePixels.data());
         CHECK_GL_ERROR();
-
-        stbi_image_free(mSourcePixels);
-
+        mSourcePixels.swap(decltype(mSourcePixels)());
         mGLTexture.init(textureId);
     }
 }
