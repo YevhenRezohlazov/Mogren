@@ -234,6 +234,16 @@ namespace Math
         {
             return *this *= 1.0f / c;
         }
+
+        inline bool operator==(const Vector<TValue, 4>& other) const
+        {
+            return x == other.x && y == other.y && z == other.z && w == other.w;
+        }
+
+        inline bool operator!=(const Vector<TValue, 4>& other) const
+        {
+            return x != other.x || y != other.y || z != other.z || w != other.w;
+        }
     };
 
     typedef Vector<bool, 4> Vector4DB;

@@ -263,6 +263,16 @@ namespace Math
             z /= c;
             return *this;
         }
+
+        inline bool operator==(const Vector<TValue, 3>& other) const
+        {
+            return x == other.x && y == other.y && z == other.z;
+        }
+
+        inline bool operator!=(const Vector<TValue, 3>& other) const
+        {
+            return x != other.x || y != other.y || z != other.z;
+        }
     };
 
     typedef Vector<bool, 3> Vector3DB;

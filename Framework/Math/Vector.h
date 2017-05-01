@@ -232,6 +232,9 @@ namespace Math
 
             return *this;
         }
+
+        bool operator==(const Vector<TValue, Dimension> & other) const;
+        bool operator!=(const Vector<TValue, Dimension> & other) const;
     };
 
     template <typename TValue, uint8_t Dimension>
@@ -361,6 +364,26 @@ namespace Math
         {
             res += mComponents[i] * other.mComponents[i];
         }
+    }
+
+    template<typename TValue, uint8_t Dimension>
+    inline bool Vector<TValue, Dimension>::operator==(const Vector<TValue, Dimension>& other) const
+    {
+        for (uint8_t i = 0; i < Dimension; ++i)
+        {
+            if (mComponents[i] != other.mComponents[i])
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    template<typename TValue, uint8_t Dimension>
+    inline bool Vector<TValue, Dimension>::operator!=(const Vector<TValue, Dimension>& other) const
+    {
+        return !(*this == other);
     }
 }
 

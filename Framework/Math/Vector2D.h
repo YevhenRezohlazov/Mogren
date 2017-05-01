@@ -257,6 +257,16 @@ namespace Math
             y /= c;
             return *this;
         }
+
+        inline bool operator==(const Vector<TValue, 2>& other) const
+        {
+            return x == other.x && y == other.y;
+        }
+
+        inline bool operator!=(const Vector<TValue, 2>& other) const
+        {
+            return x != other.x || y != other.y;
+        }
     };
 
     typedef Vector<bool, 2> Vector2DB;
