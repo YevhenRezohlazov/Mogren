@@ -44,6 +44,16 @@ namespace Common
         ///
         virtual bool updateGlobalTransformationMatrix();
 
+        ///
+        /// Returns \a true if the scene item and all of its children are excluded from any scene processing
+        ///
+        bool isEnabled() const;
+
+        ///
+        /// If set to \a false, the visual scene item and all of its children are excluded from any scene processing
+        ///
+        void setEnabled(bool enabled);
+
     protected:
         ///
         /// Sets mIsTransformationDirty of each scene item child to true
@@ -57,6 +67,7 @@ namespace Common
         std::unique_ptr<Transformation> mTransformation;
         uint64_t mLastTransformationVersion;
         bool mIsTransformationDirty;
+        bool mIsEnabled;
     };
 
     template<typename TTransformation>

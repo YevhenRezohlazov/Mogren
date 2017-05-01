@@ -132,12 +132,12 @@ namespace Graphics
         {
             auto visualItem = dynamic_cast<VisualSceneItem*>(item);
 
-            if (visualItem && visualItem->isVisible())
+            if (visualItem && visualItem->isEnabled())
             {
                 visualItem->render(*this);
             }
 
-            if (!visualItem || visualItem->isVisible())
+            if (!visualItem || visualItem->isEnabled())
             {
                 auto& children = item->getChildren();
 

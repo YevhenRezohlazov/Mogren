@@ -10,7 +10,7 @@
 
 namespace Graphics
 {
-    VisualSceneItem::VisualSceneItem() : mIsVisible(true)
+    VisualSceneItem::VisualSceneItem()
     {
     }
 
@@ -42,16 +42,6 @@ namespace Graphics
     void VisualSceneItem::setGeometry(const std::shared_ptr<Geometry>& geometry)
     {
         mGeometry = geometry;
-    }
-
-    bool VisualSceneItem::isVisible() const
-    {
-        return mIsVisible;
-    }
-
-    void VisualSceneItem::setVisible(bool visible)
-    {
-        mIsVisible = visible;
     }
 
     void VisualSceneItem::render(const Camera & camera)

@@ -43,16 +43,6 @@ namespace Graphics
         void setGeometry(const std::shared_ptr<Geometry> & geometry);
 
         ///
-        /// Returns \a true if the visual scene item and all of its children are visible.
-        ///
-        bool isVisible() const;
-
-        ///
-        /// If set to \a false, the visual scene item and all of its children are not visible.
-        ///
-        void setVisible(bool visible);
-
-        ///
         /// Renders the visual scene item
         ///
         virtual void render(const Camera & camera);
@@ -62,8 +52,6 @@ namespace Graphics
     private:
         std::shared_ptr<Shader> mShader;
         std::shared_ptr<Geometry> mGeometry;
-
-        bool mIsVisible;
     };
 }
 

@@ -7,7 +7,8 @@ namespace Common
         : mGlobalTransformationMatrix(Math::Matrix4x4::Identity),
         mTransformation(std::make_unique<Transformation>()),
         mLastTransformationVersion(0),
-        mIsTransformationDirty(false)
+        mIsTransformationDirty(false),
+        mIsEnabled(true)
     {
     }
 
@@ -55,6 +56,16 @@ namespace Common
         }
 
         return false;
+    }
+
+    bool SceneItem::isEnabled() const
+    {
+        return mIsEnabled;
+    }
+
+    void SceneItem::setEnabled(bool enabled)
+    {
+        mIsEnabled = enabled;
     }
 
     void SceneItem::makeChildrenTransformationDirty()
