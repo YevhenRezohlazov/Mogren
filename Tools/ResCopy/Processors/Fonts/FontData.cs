@@ -17,6 +17,8 @@ namespace ResCopy
 
         public string Alphabet { get; private set; }
 
+        public bool NoMipMaps { get; private set; }
+
         public static FontData Load(string fileName)
         {
             var res = new FontData();
@@ -26,6 +28,7 @@ namespace ResCopy
             res.Style = GetAttributeValue(document.Root, "Style", "Regular");
             res.Size = int.Parse(GetAttributeValue(document.Root, "Size"));
             res.Alphabet = GetAttributeValue(document.Root, "Alphabet");
+            res.NoMipMaps = bool.Parse(GetAttributeValue(document.Root, "NoMipMaps", "false"));
 
             return res;
         }

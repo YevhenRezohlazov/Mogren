@@ -131,7 +131,7 @@ namespace ResCopy
                 }
             }
 
-            var mapBitmap = new Bitmap(maxMapWidth, maxMapHeight);
+            var mapBitmap = new Bitmap(GetNearestPowerOfTwo(maxMapWidth), GetNearestPowerOfTwo(maxMapHeight));
             var mapBitmapGraphics = Graphics.FromImage(mapBitmap);
             mapBitmapGraphics.TextRenderingHint = TextRenderingHint.SingleBitPerPixelGridFit;
 
@@ -142,8 +142,20 @@ namespace ResCopy
             }
 
             var mogrenFont = new MogrenFontData(font.Height, mapBitmap, charsData.ToArray());
-            mogrenFont.Save(outputFileName);
+            mogrenFont.Save(outputFileName, fontData.NoMipMaps);
             return outputFileName;
+        }
+
+        private static int GetNearestPowerOfTwo(int val)
+        {
+            int res = 1;
+
+            while (res < val)
+            {
+                res <<= 1;
+            }
+
+            return res;
         }
     }
 }

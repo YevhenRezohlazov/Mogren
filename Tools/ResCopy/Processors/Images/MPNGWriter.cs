@@ -21,7 +21,7 @@ namespace ResCopy
             public MemoryStream BitmapStream;
         }
 
-        public static void WriteMPNG(Bitmap srcBitmap, Stream targetStream)
+        public static void WriteMPNG(Bitmap srcBitmap, Stream targetStream, bool noMipMaps = false)
         {
             var potWidth = GetNearestPowerOfTwo(srcBitmap.Width);
             var potHeight = GetNearestPowerOfTwo(srcBitmap.Height);
@@ -46,6 +46,11 @@ namespace ResCopy
                 resBitmap.Save(resBirmapStream, ImageFormat.Png);
 
                 resBitmaps.Add(new ResBitmapData { BitmapStream = resBirmapStream, BitmapSize = new System.Drawing.Size(potWidth, potHeight) });
+
+                if (noMipMaps)
+                {
+                    break;
+                }
             }
 
             var writer = new BinaryWriter(targetStream);

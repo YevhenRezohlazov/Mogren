@@ -21,7 +21,7 @@ namespace ResCopy
             CharsData = charsData;
         }
 
-        public void Save(string fileName)
+        public void Save(string fileName, bool noMipMaps)
         {
             using (var writer = new BinaryWriter(new FileStream(fileName, FileMode.Create), Encoding.Unicode))
             {
@@ -69,7 +69,7 @@ namespace ResCopy
                 }
 
                 var mapStream = new MemoryStream();
-                MPNGWriter.WriteMPNG(MapBitmap, mapStream);
+                MPNGWriter.WriteMPNG(MapBitmap, mapStream, noMipMaps);
 
                 // 4 bytes integer - map image size in bytes
                 writer.Write((int)mapStream.Length);
