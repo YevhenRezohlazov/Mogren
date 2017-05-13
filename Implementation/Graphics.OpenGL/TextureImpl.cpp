@@ -60,7 +60,8 @@ namespace Graphics
         CHECK_GL_ERROR();
         glTexImage2D(GL_TEXTURE_2D, 0, format, mWidth, mHeight, 0, format, GL_UNSIGNED_BYTE, mSourcePixels.data());
         CHECK_GL_ERROR();
-        mSourcePixels.swap(decltype(mSourcePixels)());
+        mSourcePixels.clear();
+        mSourcePixels.shrink_to_fit();
         mGLTexture.init(textureId);
     }
 }
