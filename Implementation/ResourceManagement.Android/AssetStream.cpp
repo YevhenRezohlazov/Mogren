@@ -2,6 +2,7 @@
 
 #include <Mogren/Implementation/Core.Android/AndroidCoreImpl.h>
 #include <Mogren/Framework/Common/ImplementationProvider.h>
+#include <assert.h>
 
 namespace ResourceManagement
 {
@@ -13,6 +14,7 @@ namespace ResourceManagement
 			static_cast<Common::AndroidCoreImpl&>(Common::getImpl<Common::NativeCoreInterface>()).getAssetManager(),
 			assetPath.c_str(),
 			AASSET_MODE_UNKNOWN);
+		assert(mAsset && "Asset not found");
 	}
 
 	void AssetStream::setPosition(uint32_t position)

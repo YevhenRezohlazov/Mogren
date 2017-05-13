@@ -75,5 +75,5 @@ namespace Graphics
     template <> inline VertexAttributeType getVertexAttributeType<Graphics::Color>() { return VertexAttributeType::Color; }
 }
 
-#define FIELD_TYPE_AND_OFFSET(VertexType, FieldName) getVertexAttributeType<decltype(((VertexType*)(nullptr))->FieldName)>(), (int)&((VertexType*)(nullptr))->FieldName
+#define FIELD_TYPE_AND_OFFSET(VertexType, FieldName) getVertexAttributeType<decltype(((VertexType*)(nullptr))->FieldName)>(), (int)(long long)&((VertexType*)(nullptr))->FieldName
 
