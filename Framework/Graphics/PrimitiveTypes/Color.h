@@ -51,6 +51,8 @@ namespace Graphics
         {
             return Math::Vector3DF(r, g, b);
         }
+
+        constexpr Color mix(const Color & other, float value) const;
     };
 
     constexpr Color::Color() : r(0.0f), g(0.0f), b(0.0f), a(0.0f)
@@ -72,6 +74,15 @@ namespace Graphics
     constexpr Color::Color(const Color &color, float a /*= 1.0f*/)
         : r(color.r), g(color.g), b(color.b), a(a)
     {
+    }
+
+    constexpr Color Color::mix(const Color & other, float value) const
+    {
+        return Color(
+            other.r * value + r * (1.0f - value),
+            other.g * value + g * (1.0f - value),
+            other.b * value + b * (1.0f - value), 
+            other.a * value + a * (1.0f - value));
     }
 
     namespace Colors
