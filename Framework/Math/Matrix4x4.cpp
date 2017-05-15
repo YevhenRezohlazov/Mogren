@@ -276,7 +276,7 @@ namespace Math
     {
     }
 
-    Matrix4x4::Matrix(float *elements)
+    Matrix4x4::Matrix(const float *elements)
     {
         m00 = elements[0]; m01 = elements[1]; m02 = elements[2]; m03 = elements[3];
         m10 = elements[4]; m11 = elements[5]; m12 = elements[6]; m13 = elements[7];

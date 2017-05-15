@@ -26,5 +26,14 @@ namespace Common
         /// Gets or sets the position.
         ///
         Transformation3D& setPosition(const Math::Vector3DF& position);
+
+        Transformation3D& setRotation(const Math::Vector3DF& pitchYawRoll);
+
+        Transformation3D& setScale(const Math::Vector3DF& scale);
+
+        Math::Vector3DF getScale() const;
+
+    private:
+        Math::Vector3DF mScale = Math::Vector3DF(1.0f);
     };
 }

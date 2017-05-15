@@ -56,7 +56,7 @@ namespace Math
         /// Initializes a new instance of the Matrix struct from given elements array.
         /// \param elements The elements array pointer.
         ///
-        Matrix(float *elements);
+        Matrix(const float *elements);
 
         ///
         /// Transforms the vector by this matrix.
