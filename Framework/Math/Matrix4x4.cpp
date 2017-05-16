@@ -286,19 +286,17 @@ namespace Math
 
     Vector3DF Matrix4x4::transformVector(const Vector3DF &vec) const
     {
-        return Vector3DF(
-            vec.x * m00 + vec.y * m10 + vec.z * m20 + m30,
-            vec.x * m01 + vec.y * m11 + vec.z * m21 + m31,
-            vec.x * m02 + vec.y * m12 + vec.z * m22 + m32);
+        const auto homResult = transformHomogeneousVector(Vector4DF(vec, 1.0f));
+        return homResult.convertToVector3D();
     }
 
     Vector4DF Matrix4x4::transformHomogeneousVector(const Vector4DF &vec) const
     {
         return Vector4DF(
-            vec.x * m00 + vec.y * m10 + vec.z * m20 + m30,
-            vec.x * m01 + vec.y * m11 + vec.z * m21 + m31,
-            vec.x * m02 + vec.y * m12 + vec.z * m22 + m32,
-            vec.x * m03 + vec.y * m13 + vec.z * m23 + m33);
+            vec.x * m00 + vec.y * m10 + vec.z * m20 + vec.w * m30,
+            vec.x * m01 + vec.y * m11 + vec.z * m21 + vec.w * m31,
+            vec.x * m02 + vec.y * m12 + vec.z * m22 + vec.w * m32,
+            vec.x * m03 + vec.y * m13 + vec.z * m23 + vec.w * m33);
     }
 
     Vector4DF Matrix4x4::rotateHomogeneousVector(const Vector4DF &vec) const

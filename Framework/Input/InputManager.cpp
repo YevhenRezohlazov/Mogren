@@ -43,12 +43,12 @@ namespace Input
             {
                 if (mFocusedCamera && mFocusedCamera != &camera) continue;
                 
-                Math::Point3DF nearScreenPosition(
+                const Math::Point3DF nearScreenPosition(
                     (elem.mPosition.x - camera.getViewport().mLeft) / float(camera.getViewport().mWidth) * 2.0f - 1.0f,
                     -(elem.mPosition.y - camera.getViewport().mTop) / float(camera.getViewport().mHeight) * 2.0f + 1.0f,
                     1.0f);
 
-                Math::Point3DF farScreenPosition(nearScreenPosition.x, nearScreenPosition.y, -1.0f);
+                const Math::Point3DF farScreenPosition(nearScreenPosition.x, nearScreenPosition.y, -1.0f);
 
                 // check if touch is inside the viewport
                 if (elem.mAction == TouchAction::Down &&
