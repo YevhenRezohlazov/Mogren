@@ -76,6 +76,8 @@ namespace ResCopy
                 initialMapWidth = maxCharWidth;
             }
 
+            initialMapWidth = GetNearestPowerOfTwo(initialMapWidth);
+
             var sortedCharsData = charsData.OrderByDescending(d => d.ContainerSize.Width).ToList();
 
             var curWidth = 0;

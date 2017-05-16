@@ -98,7 +98,9 @@ namespace Graphics
             std::vector<CharacterMetrics> charMetrics;
             charMetrics.reserve(text.length());
 
-            const float scale = lineHeight / getFontSize();
+            const float heightScale = lineHeight / getFontSize();
+            const float widthScale = heightScale * mMapTexture->getSize().width / mMapTexture->getSize().height;
+            const Math::Vector2DF scale(widthScale, heightScale);
 
             float curHeight = 0;
             for (const auto& line : lines)
@@ -112,23 +114,23 @@ namespace Graphics
                     {
                         auto word = line.substr(wordStart, ci - wordStart);
                         wordStart = ci + 1;
-                        auto wordWidth = measureWordWidth(word, curWidth == 0.0f, charSpacing, scale, defCharData);
+                        auto wordWidth = measureWordWidth(word, curWidth == 0.0f, charSpacing, widthScale, defCharData);
 
                         if (maxWidth <= 0 || curWidth + wordWidth <= maxWidth)
                         {
-                            std::function<void(wchar_t, bool)> addChar =
-                                [this, &defCharData, &curWidth, curHeight, charSpacing, scale, &charMetrics](wchar_t ch, bool firstChar)
+                            auto addChar =
+                                [this, &defCharData, &curWidth, curHeight, charSpacing, widthScale, heightScale, &scale, &charMetrics](wchar_t ch, bool firstChar)
                             {
                                 auto &charData = getCharacterData(ch, defCharData);
-                                auto charShift = firstChar ? 0.0f : (charData.getRangeRectangle().position.x * scale);
+                                auto charShift = firstChar ? 0.0f : (charData.getRangeRectangle().position.x * widthScale);
                                 Math::RectangleF texRect(
                                     Math::Point2DF(curWidth - charShift, curHeight),
                                     charData.getMapRectangle().size * scale);
 
                                 charMetrics.push_back(CharacterMetrics(charData, texRect));
                                 curWidth +=
-                                    (firstChar ? charData.getRangeRectangle().position.x * scale : 0)
-                                    + (charData.getRangeRectangle().size *scale).width + charSpacing;
+                                    (firstChar ? charData.getRangeRectangle().position.x * widthScale : 0)
+                                    + charData.getRangeRectangle().size.width *widthScale + charSpacing;
                             };
 
                             bool firstChar = true;
@@ -139,7 +141,7 @@ namespace Graphics
                             }
 
                             if (ci != line.length()
-                                && (maxWidth <= 0 || curWidth + spaceCharData.getRangeRectangle().size.width * scale <= maxWidth))
+                                && (maxWidth <= 0 || curWidth + spaceCharData.getRangeRectangle().size.width * widthScale <= maxWidth))
                             {
                                 addChar(' ', false);
                             }
@@ -182,7 +184,7 @@ namespace Graphics
         float Font::measureWordWidth(
             const std::wstring &word,
             bool isFirstWord,
-            float scale,
+            float widthScale,
             float charSpacing,
             const FontCharacterData &defaultChar)
         {
@@ -195,19 +197,19 @@ namespace Graphics
 
                 if (isFirstWord && word.length() == 1)
                 {
-                    width += (charData.getMapRectangle().size.width) * scale;
+                    width += (charData.getMapRectangle().size.width) * widthScale;
                 }
                 else if (i == 0 && isFirstWord)
                 {
-                    width += (charData.getRangeRectangle().position.x + charData.getRangeRectangle().size.width) * scale;
+                    width += (charData.getRangeRectangle().position.x + charData.getRangeRectangle().size.width) * widthScale;
                 }
                 else if (i == word.length() - 1)
                 {
-                    width += (charData.getMapRectangle().size.width - charData.getRangeRectangle().position.x) * scale;
+                    width += (charData.getMapRectangle().size.width - charData.getRangeRectangle().position.x) * widthScale;
                 }
                 else
                 {
-                    width += charData.getRangeRectangle().size.width * scale;
+                    width += charData.getRangeRectangle().size.width * widthScale;
                 }
 
                 width += (i == word.length() - 1) ? 0 : charSpacing;
