@@ -21,7 +21,7 @@ namespace ResCopy
         {
             var srcBitmap = new Bitmap(srcResPath);
             var outputFilePath = Path.Combine(destDirPath, Path.GetFileName(srcResPath));
-            MPNGWriter.WriteMPNG(srcBitmap, new FileStream(outputFilePath, FileMode.Create));
+            MPNGWriter.WriteMPNG(srcBitmap, new FileStream(outputFilePath, FileMode.Create), srcResPath.ToLower().EndsWith(".nn.png"));
             return outputFilePath;
         }
     }

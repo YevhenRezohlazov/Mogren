@@ -21,7 +21,7 @@ namespace ResCopy
             public MemoryStream BitmapStream;
         }
 
-        public static void WriteMPNG(Bitmap srcBitmap, Stream targetStream, bool noMipMaps = false)
+        public static void WriteMPNG(Bitmap srcBitmap, Stream targetStream, bool nearestNeighbour = false)
         {
             var potWidth = GetNearestPowerOfTwo(srcBitmap.Width);
             var potHeight = GetNearestPowerOfTwo(srcBitmap.Height);
@@ -41,13 +41,13 @@ namespace ResCopy
                 graphics.DrawImage(srcBitmap, new Rectangle(0, 0, potWidth, potHeight));*/
 
                 var resBirmapStream = new MemoryStream();
-                var resBitmap = CreateResizedImage(srcBitmap.ToWpfBitmap(), potWidth, potHeight).ToWinFormsBitmap();
+                var resBitmap = CreateResizedImage(srcBitmap.ToWpfBitmap(), potWidth, potHeight, nearestNeighbour).ToWinFormsBitmap();
                 resBitmap.RotateFlip(RotateFlipType.RotateNoneFlipY);
                 resBitmap.Save(resBirmapStream, ImageFormat.Png);
 
                 resBitmaps.Add(new ResBitmapData { BitmapStream = resBirmapStream, BitmapSize = new System.Drawing.Size(potWidth, potHeight) });
 
-                if (noMipMaps)
+                if (nearestNeighbour)
                 {
                     break;
                 }
@@ -95,9 +95,9 @@ namespace ResCopy
             return res;
         }
 
-        private static BitmapFrame CreateResizedImage(ImageSource source, int width, int height)
+        private static BitmapFrame CreateResizedImage(BitmapSource source, int width, int height, bool noStretch)
         {
-            var rect = new Rect(0, 0, width, height);
+            var rect = noStretch ? new Rect(0, 0, source.PixelWidth, source.PixelHeight) : new Rect(0, 0, width, height);
 
             var group = new DrawingGroup();
             RenderOptions.SetBitmapScalingMode(group, BitmapScalingMode.HighQuality);

@@ -44,9 +44,9 @@ namespace Graphics
 
         auto countOfBitmaps = reader.read<uint16_t>();
 
-        // ignore first bitmap size
-        (void)reader.read<uint16_t>();
-        (void)reader.read<uint16_t>();
+        // first bitmap size
+        auto firstBitmapWidth = reader.read<uint16_t>();
+        auto firstBitmapHeight = reader.read<uint16_t>();
 
         auto prevBitmapFileShift = reader.read<uint32_t>();
         auto prevBitmapDataSize = reader.read<uint32_t>();
@@ -74,6 +74,9 @@ namespace Graphics
         
         auto nativeTexture = Common::getImpl<NativeGraphicsInterface>().loadTexture(stream, prevBitmapDataSize);
         assert(nativeTexture);
-        return std::make_unique<Texture>(std::move(nativeTexture), Math::Size2DI(srcImageWidth, srcImageHeight));
+        return std::make_unique<Texture>(
+            std::move(nativeTexture),
+            Math::Size2DI(srcImageWidth, srcImageHeight),
+            Math::RectangleF(0.0f, 0.0f, srcImageWidth / (float)firstBitmapWidth, srcImageHeight / (float)firstBitmapHeight));
     }
 }

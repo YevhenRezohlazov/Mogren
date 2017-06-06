@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include <Mogren/Framework/Math/Vector2D.h>
+#include <Mogren/Framework/Math/Rectangle.h>
 #include <Mogren/Framework/ResourceManagement/Resource.h>
 #include <memory>
 
@@ -24,7 +25,12 @@ namespace Graphics
         ///
         /// \param nativeTexture The native texture instance.
         /// \param size Overridden texture size.
-        Texture(std::unique_ptr<NativeTexture> nativeTexture, const Math::Size2DI & size);
+        /// \param originalTextureRect Original texture rectangle
+        /// (in texture coords space) for nearest neightbour textures
+        Texture(
+            std::unique_ptr<NativeTexture> nativeTexture,
+            const Math::Size2DI & size,
+            const Math::RectangleF & originalTextureRect);
 
         ///
         /// Initializes a new instance of the Texture class.
@@ -43,6 +49,12 @@ namespace Graphics
         ///
         const Math::Size2DI& getSize() const;
 
+        ///
+        /// Gets the original texture rectangle
+        /// (in texture coords space) for nearest neightbour textures
+        ///
+        const Math::RectangleF getOriginalTextureRect() const;
+
         virtual ~Texture();
 
     protected:
@@ -51,6 +63,7 @@ namespace Graphics
     private:
         std::unique_ptr<NativeTexture> mNativeTexture;
         Math::Size2DI mSize;
+        Math::RectangleF mOriginalTextureRect;
     };
 }
 
