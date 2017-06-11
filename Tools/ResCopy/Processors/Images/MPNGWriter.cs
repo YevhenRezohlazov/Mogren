@@ -97,7 +97,7 @@ namespace ResCopy
 
         private static BitmapFrame CreateResizedImage(BitmapSource source, int width, int height, bool noStretch)
         {
-            var rect = noStretch ? new Rect(0, 0, source.PixelWidth, source.PixelHeight) : new Rect(0, 0, width, height);
+            var rect = noStretch ? new Rect(0, height - source.PixelHeight, source.PixelWidth, source.PixelHeight) : new Rect(0, 0, width, height);
 
             var group = new DrawingGroup();
             RenderOptions.SetBitmapScalingMode(group, BitmapScalingMode.HighQuality);
