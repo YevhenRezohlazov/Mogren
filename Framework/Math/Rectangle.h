@@ -24,7 +24,7 @@ namespace Math
         ///
         /// Initializes a new instance of the Rectangle struct.
         ///
-        Rectangle() : position(), size()
+        constexpr Rectangle() : position(), size()
         {
         }
 
@@ -35,7 +35,7 @@ namespace Math
         /// \param y Rectangle y coordinate.
         /// \param width Rectangle width.
         /// \param height Rectangle height.
-        Rectangle(TValue x, TValue y, TValue width, TValue height)
+        constexpr Rectangle(TValue x, TValue y, TValue width, TValue height)
             : position(x, y), size(width, height)
         {
         }
@@ -45,7 +45,7 @@ namespace Math
         ///
         /// \param position Rectangle position.
         /// \param size Rectangle size.
-        Rectangle(const Vector<TValue, 2> &position, const Vector<TValue, 2> &size)
+        constexpr Rectangle(const Vector<TValue, 2> &position, const Vector<TValue, 2> &size)
             : position(position), size(size)
         {
         }
@@ -54,7 +54,7 @@ namespace Math
         /// Initializes a new instance of the Rectangle struct.
         ///
         /// \param size Rectangle size.
-        explicit Rectangle(const Vector<TValue, 2> &size)
+        constexpr explicit Rectangle(const Vector<TValue, 2> &size)
             : position(), size(size)
         {
         }
@@ -62,20 +62,28 @@ namespace Math
         ///
         /// Check if the given point is inside the rectangle.
         ///
-        bool containsPoint(const Vector<TValue, 2> &point) const
+        constexpr bool containsPoint(const Vector<TValue, 2> &point) const
         {
             return (Math::sign(point.x - position.x) != Math::sign(point.x - (position.x + size.width)))
                 & (Math::sign(point.y - position.y) != Math::sign(point.y - (position.y + size.height)));
         }
 
-        Vector<TValue, 2> getCenterPoint() const
+        constexpr Vector<TValue, 2> getCenterPoint() const
         {
             return Vector<TValue, 2>(position.x + size.width * 0.5f, position.y + size.height * 0.5f);
         }
 
-        Vector<TValue, 2> getPositionPlusSizeMul(const Vector<TValue, 2> &sizeMul) const
+        constexpr Vector<TValue, 2> getPositionPlusSizeMul(const Vector<TValue, 2> &sizeMul) const
         {
             return position + size * sizeMul;
+        }
+
+        ///
+        /// Transforms the given point from space of the current rectangle to the space of the other rectangle
+        ///
+        constexpr Vector<TValue, 2> transformPointToRect(const Vector<TValue, 2> & point, const Rectangle<TValue> & other) const
+        {
+            return ((point - position) / size) * other.size + other.position;
         }
     };
 
