@@ -78,6 +78,50 @@ namespace Math
             return position + size * sizeMul;
         }
 
+        constexpr Vector<TValue, 2> getPositionPlusSize() const
+        {
+            return position + size;
+        }
+
+        constexpr Rectangle<TValue> convertWithMargins(
+            TValue leftMargin, TValue rightMargin, TValue bottomMargin, TValue topMargin) const
+        {
+            return Rectangle<TValue>(
+                position.x + leftMargin,
+                position.y + bottomMargin,
+                size.width - (leftMargin + rightMargin),
+                size.height - (topMargin + bottomMargin));
+        }
+
+        constexpr Rectangle<TValue> convertWithMargins(TValue horizontalMargins, TValue verticalMargins) const
+        {
+            return convertWithMargins(horizontalMargins, horizontalMargins, verticalMargins, verticalMargins);
+        }
+
+        constexpr Rectangle<TValue> convertWithMargins(TValue margins) const
+        {
+            return convertWithMargins(margins, margins, margins, margins);
+        }
+
+        Rectangle<TValue> convertWithAspectRatio(float aspectRatio, bool stretchToFit = false) const
+        {
+            float currentAR = size.width / (float)size.height;
+            Rectangle<TValue> res = *this;
+
+            if ((aspectRatio > currentAR) ^ stretchToFit)
+            {
+                res.size.height = size.width / aspectRatio;
+            }
+            else
+            {
+                res.size.width = size.height * aspectRatio;
+            }
+
+            res.position.x += (TValue)((size.width - res.size.width) * 0.5f);
+            res.position.y += (TValue)((size.height - res.size.height) * 0.5f);
+            return res;
+        }
+
         ///
         /// Transforms the given point from space of the current rectangle to the space of the other rectangle
         ///
