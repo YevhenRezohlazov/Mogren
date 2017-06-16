@@ -137,7 +137,7 @@ namespace Graphics
                 visualItem->render(*this);
             }
 
-            if (!visualItem || visualItem->isEnabled())
+            if (item->isEnabled())
             {
                 auto& children = item->getChildren();
 

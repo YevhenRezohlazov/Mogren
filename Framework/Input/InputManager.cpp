@@ -84,6 +84,8 @@ namespace Input
         const Math::Point3DF &nearScreenPosition,
         const Math::Point3DF &farScreenPosition)
     {
+        if (!sceneItem.isEnabled()) return false;
+
         InputBox* inputBox;
         bool dispatchToChildren;
 
