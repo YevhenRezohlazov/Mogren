@@ -56,6 +56,7 @@ namespace Localization
         }
 
         Logging::Logger::writeError("Cannot find localized string for key \"%s\" and index %d.", key.c_str(), index);
+        assert(false && "#WRONG_STRING_KEY#");
         return L"#WRONG_STRING_KEY#";
     }
 
