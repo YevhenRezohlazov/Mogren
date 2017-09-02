@@ -115,6 +115,9 @@ namespace Graphics
         case GeometryType::TriangleStrip:
             elemType = GL_TRIANGLE_STRIP;
             break;
+        case GeometryType::TriangleFan:
+            elemType = GL_TRIANGLE_FAN;
+            break;
         default:
             elemType = GL_TRIANGLES;
             break;

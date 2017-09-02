@@ -1,5 +1,6 @@
 #include "Transformation3D.h"
 #include <Mogren/Framework/Math/Functions.h>
+#include <Mogren/Framework/Math/Quaternion.h>
 
 namespace Common
 {
@@ -81,6 +82,26 @@ namespace Common
         mMatrix.m10 = rotMatrix[1][0] * mScale.x;
         mMatrix.m20 = rotMatrix[2][0] * mScale.x;
         
+        mMatrix.m01 = rotMatrix[0][1] * mScale.y;
+        mMatrix.m11 = rotMatrix[1][1] * mScale.y;
+        mMatrix.m21 = rotMatrix[2][1] * mScale.y;
+
+        mMatrix.m02 = rotMatrix[0][2] * mScale.z;
+        mMatrix.m12 = rotMatrix[1][2] * mScale.z;
+        mMatrix.m22 = rotMatrix[2][2] * mScale.z;
+
+        incrementVersion();
+        return *this;
+    }
+
+    Transformation3D & Transformation3D::setRotation(const Math::Vector3DF & axis, float angle)
+    {
+        const Math::Quaternion quat(axis, angle);
+        const auto rotMatrix = quat.convertToRotationMatrix();
+        mMatrix.m00 = rotMatrix[0][0] * mScale.x;
+        mMatrix.m10 = rotMatrix[1][0] * mScale.x;
+        mMatrix.m20 = rotMatrix[2][0] * mScale.x;
+
         mMatrix.m01 = rotMatrix[0][1] * mScale.y;
         mMatrix.m11 = rotMatrix[1][1] * mScale.y;
         mMatrix.m21 = rotMatrix[2][1] * mScale.y;

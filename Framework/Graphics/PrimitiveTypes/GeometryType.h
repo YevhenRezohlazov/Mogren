@@ -6,6 +6,7 @@ namespace Graphics
     {
         TriangleList,
         TriangleStrip,
+        TriangleFan,
         LineList,
         LineStrip
     };

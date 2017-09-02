@@ -48,7 +48,6 @@ namespace Graphics
     {
         if (mGeometry == nullptr || mShader == nullptr)
         {
-            Logging::Logger::writeWarning("Can't render visual item without geometry or shader set.");
             return;
         }
 

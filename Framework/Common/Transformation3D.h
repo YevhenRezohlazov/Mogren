@@ -29,6 +29,8 @@ namespace Common
 
         Transformation3D& setRotation(const Math::Vector3DF& pitchYawRoll);
 
+        Transformation3D& setRotation(const Math::Vector3DF& axis, float angle);
+
         Transformation3D& setScale(const Math::Vector3DF& scale);
 
         Math::Vector3DF getScale() const;
