@@ -51,12 +51,24 @@ namespace Math
         }
 
         ///
-        /// Initializes a new instance of the Rectangle struct.
+        /// Initializes a new instance of the Rectangle struct with given size. Position is set to (0, 0).
         ///
         /// \param size Rectangle size.
         constexpr explicit Rectangle(const Vector<TValue, 2> &size)
             : position(), size(size)
         {
+        }
+
+        ///
+        /// Initializes a new instance of the Rectangle struct from given size and center point
+        ///
+        /// \param size Rectangle size.
+        /// \param center Center of the rectangle. (0, 0) by default
+        constexpr static Rectangle<TValue> fromSizeCenter(
+            const Vector<TValue, 2> &size,
+            const Vector<TValue, 2> &center = Vector<TValue, 2>())
+        {
+            return Rectangle<TValue>(center - size * 0.5f, size);
         }
 
         ///
