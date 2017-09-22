@@ -14,7 +14,7 @@ namespace Input
         ///
         /// Initializes new instance of a RectangleTouchData class
         /// \param action The touch action (Up/Down/Move)
-        /// \param touchPosition The touch position (relative to input rectangle's left top corner)
+        /// \param touchPosition The touch position (in the same space as the rectangle)
         /// \param pointerId The pointer (finger) id. Id shouldn't be changed
         /// while user holds finger on the screen
         /// \param touchTime The time when the touch event occurred
@@ -31,7 +31,7 @@ namespace Input
         Common::TouchAction getAction() const;
 
         ///
-        /// Returns the touch position (relative to input rectangle's left top corner)
+        /// Returns the touch position (in the same space as the rectangle)
         ///
         Math::Point2DF getTouchPosition() const;
 
