@@ -43,6 +43,18 @@ namespace Common
         /// \param child The child to be removed.
         virtual void removeChild(const std::shared_ptr< TItem > & child);
 
+        ///
+        /// Moves the specified child to the front of the children list
+        ///
+        /// \param child The child to be moved.
+        virtual void bringChildToFront(const std::shared_ptr< TItem > & child);
+
+        ///
+        /// Moves the specified child to the back of the children list
+        ///
+        /// \param child The child to be moved.
+        virtual void sendChildToBack(const std::shared_ptr< TItem > & child);
+
         virtual ~HierarchyItem();
 
     private:
@@ -128,6 +140,33 @@ namespace Common
         {
             mChildren.erase(childIter);
             child->setParent(nullptr);
+        }
+    }
+
+    template<typename TItem>
+    inline void HierarchyItem<TItem>::bringChildToFront( const std::shared_ptr<TItem>& child )
+    {
+        auto childIt = std::find(mChildren.begin(), mChildren.end(), child);
+
+        if (childIt == mChildren.begin() || childIt == mChildren.end())
+            return;
+
+        for (; childIt != mChildren.begin(); --childIt)
+        {
+            *childIt = *(childIt - 1);
+        }
+
+        *childIt = child;
+    }
+
+    template<typename TItem>
+    inline void HierarchyItem<TItem>::sendChildToBack( const std::shared_ptr<TItem>& child )
+    {
+        auto childIt = std::find(mChildren.begin(), mChildren.end(), child);
+        if (childIt != mChildren.end())
+        {
+            mChildren.erase(childIt);
+            mChildren.push_back(child);
         }
     }
 
