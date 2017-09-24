@@ -315,4 +315,10 @@ namespace Math
             vec.x * m01 + vec.y * m11 + vec.z * m21,
             vec.x * m02 + vec.y * m12 + vec.z * m22);
     }
+
+    Vector3DF Matrix4x4::getPosition( ) const
+    {
+        return Vector3DF(m30, m31, m32);
+    }
+
 } // Math

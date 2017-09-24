@@ -53,6 +53,11 @@ namespace Graphics
         return mAngleOfView;
     }
 
+    float PerspectiveCameraProjection::getAspectRatio( ) const
+    {
+        return mAspectRatio;
+    }
+
     void PerspectiveCameraProjection::updateMatrix()
     {
         const float f = 1.0f / Math::tan(mAngleOfView * 0.5f);

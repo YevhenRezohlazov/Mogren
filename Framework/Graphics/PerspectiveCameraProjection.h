@@ -27,6 +27,8 @@ namespace Graphics
 
         float getAngleOfView() const;
 
+        float getAspectRatio() const;
+
     private:
         void updateMatrix();
 

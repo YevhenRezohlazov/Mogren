@@ -105,6 +105,11 @@ namespace Math
         Matrix<4, 4> convertToCameraViewMatrix() const;
 
         ///
+        /// Extracts position from the matrix
+        ///
+        Vector3DF getPosition() const;
+
+        ///
         /// Creates new matrix filling its main diagonal with 1.0f
         ///
         static Matrix<4, 4> createIdentity()
