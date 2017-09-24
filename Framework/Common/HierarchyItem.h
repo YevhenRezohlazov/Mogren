@@ -116,7 +116,7 @@ namespace Common
     template<typename TItem>
     inline void HierarchyItem<TItem>::addChild(const std::shared_ptr<TItem>& child)
     {
-        assert(child != nullptr);
+        if (child == nullptr) return;
 
         if (child->hasParent())
         {
@@ -134,7 +134,8 @@ namespace Common
     template<typename TItem>
     inline void HierarchyItem<TItem>::removeChild(const std::shared_ptr<TItem>& child)
     {
-        assert(child != nullptr);
+        if (child == nullptr) return;
+
         auto childIter = std::find(mChildren.cbegin(), mChildren.cend(), child);
         if (childIter != mChildren.cend())
         {
