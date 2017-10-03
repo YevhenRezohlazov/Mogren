@@ -21,6 +21,7 @@
 #include <jni.h>
 #include <errno.h>
 #include <cassert>
+#include <cstdlib>
 
 #include <EGL/egl.h>
 #include <GLES/gl.h>

@@ -9,7 +9,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 
 namespace ResCopy
 {
@@ -30,18 +29,8 @@ namespace ResCopy
 
             for (; potWidth > 0 && potHeight > 0; potWidth >>= 1, potHeight >>= 1)
             {
-                /*var resBitmap = new Bitmap(potWidth, potHeight);
-                var graphics = Graphics.FromImage(resBitmap);
-
-                graphics.InterpolationMode = InterpolationMode.High;
-                graphics.CompositingQuality = CompositingQuality.HighQuality;
-                graphics.SmoothingMode = SmoothingMode.AntiAlias;
-
-                graphics.Clear(Color.Transparent);
-                graphics.DrawImage(srcBitmap, new Rectangle(0, 0, potWidth, potHeight));*/
-
                 var resBirmapStream = new MemoryStream();
-                var resBitmap = CreateResizedImage(srcBitmap.ToWpfBitmap(), potWidth, potHeight, nearestNeighbour).ToWinFormsBitmap();
+                var resBitmap = CreateResizedImage(srcBitmap, potWidth, potHeight, nearestNeighbour);
                 resBitmap.RotateFlip(RotateFlipType.RotateNoneFlipY);
                 resBitmap.Save(resBirmapStream, ImageFormat.Png);
 
@@ -95,25 +84,26 @@ namespace ResCopy
             return res;
         }
 
-        private static BitmapFrame CreateResizedImage(BitmapSource source, int width, int height, bool noStretch)
+        public static Bitmap CreateResizedImage(Image image, int width, int height, bool noStretch)
         {
-            var rect = noStretch ? new Rect(0, height - source.PixelHeight, source.PixelWidth, source.PixelHeight) : new Rect(0, 0, width, height);
+            var destRect = noStretch
+                ? new Rectangle(0, height - image.Height, image.Width, image.Height)
+                : new Rectangle(0, 0, width, height);
 
-            var group = new DrawingGroup();
-            RenderOptions.SetBitmapScalingMode(group, BitmapScalingMode.HighQuality);
-            group.Children.Add(new ImageDrawing(source, rect));
+            var destImage = new Bitmap(width, height);
 
-            var drawingVisual = new DrawingVisual();
-            using (var drawingContext = drawingVisual.RenderOpen())
-                drawingContext.DrawDrawing(group);
+            using (var graphics = Graphics.FromImage(destImage))
+            {
+                graphics.CompositingMode = CompositingMode.SourceCopy;
+                graphics.CompositingQuality = CompositingQuality.HighQuality;
+                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                graphics.SmoothingMode = SmoothingMode.HighQuality;
+                graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                graphics.DrawImage(image, destRect);
+            }
 
-            var resizedImage = new RenderTargetBitmap(
-                width, height,         // Resized dimensions
-                96, 96,                // Default DPI values
-                PixelFormats.Default); // Default pixel format
-            resizedImage.Render(drawingVisual);
-
-            return BitmapFrame.Create(resizedImage);
+            return destImage;
         }
+
     }
 }

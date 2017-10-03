@@ -36,8 +36,6 @@
     <AssemblyOriginatorKeyFile>ResCopy.Processors.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -55,7 +53,6 @@
     <Compile Include="Fonts\FontData.cs" />
     <Compile Include="Fonts\FontProcessor.cs" />
     <Compile Include="Fonts\MogrenFontData.cs" />
-    <Compile Include="Images\BitmapConversion.cs" />
     <Compile Include="Images\ImageProcessor.cs" />
     <Compile Include="Images\MPNGWriter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

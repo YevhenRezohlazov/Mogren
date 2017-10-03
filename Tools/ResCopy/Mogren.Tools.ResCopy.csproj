@@ -53,7 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Processors\Mogren.Tools.ResCopy.Processors.csproj">
-      <Project>{544591e8-9f72-443d-a70b-abf51c0c624c}</Project>
+      <Project>{544591E8-9F72-443D-A70B-ABF51C0C624C}</Project>
       <Name>Mogren.Tools.ResCopy.Processors</Name>
     </ProjectReference>
   </ItemGroup>

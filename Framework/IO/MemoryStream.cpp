@@ -1,5 +1,7 @@
 #include "MemoryStream.h"
 #include <Mogren/Framework/Math/Functions.h>
+#include <cstring>
+
 namespace IO
 {
     MemoryStream::MemoryStream(uint32_t initialCapacity /*= 0*/)
