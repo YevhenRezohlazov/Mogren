@@ -9,6 +9,10 @@
 #include <GLES2/gl2.h>
 #include <GLES2/gl2ext.h>
 #include <GLES2/gl2platform.h>
+#else //Linux
+#include <GL/glew.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
 #endif
 
 #include "GLUtils.h"
@@ -20,7 +24,7 @@
 #endif
 
 #ifndef BUFFER_OFFSET
-#define BUFFER_OFFSET(off) (void*)(off)
+#define BUFFER_OFFSET(off) reinterpret_cast<GLvoid*>(off)
 #endif
 
 

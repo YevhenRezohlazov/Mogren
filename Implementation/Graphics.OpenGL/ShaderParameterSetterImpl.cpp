@@ -1,6 +1,7 @@
 #include "ShaderParameterSetterImpl.h"
 #include "ShaderProgramImpl.h"
 #include <Mogren/Framework/Graphics/NativeInterface/NativeTextureShaderParameterData.h>
+#include <string.h>
 
 namespace Graphics
 {

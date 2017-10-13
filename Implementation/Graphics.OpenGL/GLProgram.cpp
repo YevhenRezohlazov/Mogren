@@ -14,13 +14,16 @@ namespace Graphics
         fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
         CHECK_GL_ERROR();
 
-        const GLchar *shaderCodeStr = reinterpret_cast<const GLchar*>(vertexShaderCode.c_str());
-        GLint shaderCodeLen = vertexShaderCode.size();
+        auto vertexShaderCodeWithVersion = "#version 400\n" + vertexShaderCode;
+        const GLchar *shaderCodeStr = reinterpret_cast<const GLchar*>(
+                    vertexShaderCodeWithVersion.c_str());
+        GLint shaderCodeLen = vertexShaderCodeWithVersion.size();
         glShaderSource(vertexShader, 1, &shaderCodeStr, &shaderCodeLen);
         CHECK_GL_ERROR();
 
-        shaderCodeStr = reinterpret_cast<const GLchar*>(fragmentShaderCode.c_str());
-        shaderCodeLen = fragmentShaderCode.size();
+        auto fragmentShaderCodeWithVersion = "#version 400\n" + fragmentShaderCode;
+        shaderCodeStr = reinterpret_cast<const GLchar*>(fragmentShaderCodeWithVersion.c_str());
+        shaderCodeLen = fragmentShaderCodeWithVersion.size();
         glShaderSource(fragmentShader, 1, &shaderCodeStr, &shaderCodeLen);
         CHECK_GL_ERROR();
 
