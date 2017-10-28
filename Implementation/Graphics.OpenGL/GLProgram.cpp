@@ -1,6 +1,12 @@
 #include "GLProgram.h"
 #include <Mogren/Framework/Logging/Logger.h>
 
+#ifdef __ANDROID__
+#define SHADERS_VERSION_STRING ""
+#else
+#define SHADERS_VERSION_STRING "#version 400"
+#endif
+
 namespace Graphics
 {
     bool GLProgram::init(
@@ -14,14 +20,14 @@ namespace Graphics
         fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
         CHECK_GL_ERROR();
 
-        auto vertexShaderCodeWithVersion = "#version 400\n" + vertexShaderCode;
+        auto vertexShaderCodeWithVersion = SHADERS_VERSION_STRING + vertexShaderCode;
         const GLchar *shaderCodeStr = reinterpret_cast<const GLchar*>(
                     vertexShaderCodeWithVersion.c_str());
         GLint shaderCodeLen = vertexShaderCodeWithVersion.size();
         glShaderSource(vertexShader, 1, &shaderCodeStr, &shaderCodeLen);
         CHECK_GL_ERROR();
 
-        auto fragmentShaderCodeWithVersion = "#version 400\n" + fragmentShaderCode;
+        auto fragmentShaderCodeWithVersion = SHADERS_VERSION_STRING + fragmentShaderCode;
         shaderCodeStr = reinterpret_cast<const GLchar*>(fragmentShaderCodeWithVersion.c_str());
         shaderCodeLen = fragmentShaderCodeWithVersion.size();
         glShaderSource(fragmentShader, 1, &shaderCodeStr, &shaderCodeLen);
