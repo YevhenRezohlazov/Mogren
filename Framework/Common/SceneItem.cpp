@@ -81,4 +81,9 @@ namespace Common
     {
         mIsTransformationDirty = true;
     }
+
+    void SceneItem::onParentChanged()
+    {
+        onTransformationChanged();
+    }
 }

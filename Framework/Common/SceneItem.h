@@ -62,6 +62,8 @@ namespace Common
 
         virtual void onTransformationChanged();
 
+        virtual void onParentChanged() override;
+
     protected:
         Math::Matrix4x4 mGlobalTransformationMatrix;
         std::unique_ptr<Transformation> mTransformation;

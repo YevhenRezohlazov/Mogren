@@ -57,6 +57,9 @@ namespace Common
 
         virtual ~HierarchyItem();
 
+    protected:
+        virtual void onParentChanged() { }
+
     private:
         void setParent(TItem * parent);
 
@@ -184,5 +187,6 @@ namespace Common
     inline void HierarchyItem<TItem>::setParent(TItem * parent)
     {
         mParent = parent;
+        onParentChanged();
     }
 }
