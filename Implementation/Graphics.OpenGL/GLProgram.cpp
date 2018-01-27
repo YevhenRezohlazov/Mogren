@@ -4,7 +4,7 @@
 #ifdef __ANDROID__
 #define SHADERS_VERSION_STRING ""
 #else
-#define SHADERS_VERSION_STRING "#version 400"
+#define SHADERS_VERSION_STRING "#version 400\n"
 #endif
 
 namespace Graphics
