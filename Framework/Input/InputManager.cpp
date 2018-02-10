@@ -1,10 +1,12 @@
 #include "InputManager.h"
 #include <Mogren/Framework/Graphics/RenderTarget.h>
 #include <Mogren/Framework/Graphics/Camera.h>
+#include <Mogren/Framework/Logging/Logger.h>
 
 namespace Input
 {
     using namespace Common;
+    using namespace Logging;
 
     std::mutex InputManager::mTouchQueueMutex;
     std::vector<InputManager::TouchQueueElement> InputManager::mTouchQueue;
@@ -171,6 +173,7 @@ namespace Input
                         }
 
                         mFocusedTouchCount += 1;
+                        Logger::writeInfo("Focused input box %p, touch count: %d", mFocusedInputBox, mFocusedTouchCount);
                     }
                     else if (touchData.getAction() == TouchAction::Up && mFocusedInputBox)
                     {
@@ -178,6 +181,7 @@ namespace Input
 
                         if (mFocusedTouchCount == 0)
                         {
+                            Logger::writeInfo("Unfocused input box %p", mFocusedInputBox);
                             mFocusedRenderTarget = nullptr;
                             mFocusedCamera = nullptr;
                             mFocusedInputBox = nullptr;
