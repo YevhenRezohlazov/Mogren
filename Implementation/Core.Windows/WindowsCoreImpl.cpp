@@ -274,6 +274,11 @@ namespace Common
         // do nothing on windows
     }
 
+    void WindowsCoreImpl::keepDeviceAwake( bool keep )
+    {
+        // do nothing on windows
+    }
+
     std::string WindowsCoreImpl::getLocaleName() const
     {
         return "";

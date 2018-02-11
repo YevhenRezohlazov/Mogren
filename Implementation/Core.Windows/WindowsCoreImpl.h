@@ -54,7 +54,7 @@ namespace Common
         static void glutRender();
 
         virtual void vibrateDevice(float vibrationDuration);
-
+        virtual void keepDeviceAwake(bool keep);
     private:
         static WindowsCoreImpl* mInstance;
 

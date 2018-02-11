@@ -39,6 +39,16 @@ namespace App
     {
     }
 
+    void Application::keepDeviceAwake( bool keep )
+    {
+        Common::getImpl<Common::NativeCoreInterface>().keepDeviceAwake(keep);
+    }
+
+    void Application::vibrateDevice( float vibrationDuration )
+    {
+        Common::getImpl<Common::NativeCoreInterface>().vibrateDevice(vibrationDuration);
+    }
+
     const Common::TimeManager& Application::getTimeManager() const
     {
         return mTimeManager;

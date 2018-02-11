@@ -73,6 +73,9 @@ namespace App
         ///
         virtual void onBackButtonPress();
 
+        void keepDeviceAwake(bool keep);
+        void vibrateDevice(float vibrationDuration);
+
         virtual const Common::TimeManager& getTimeManager() const;
         virtual Common::TimeManager& getTimeManager();
         virtual const ResourceManagement::ResourceManager& getResourceManager() const;

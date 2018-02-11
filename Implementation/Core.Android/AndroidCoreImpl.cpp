@@ -1,6 +1,8 @@
 #include "AndroidCoreImpl.h"
 #include <Mogren/Framework/Logging/Logger.h>
 #include <cassert>
+#include <android/native_activity.h>
+#include <android/window.h>
 
 namespace Common
 {
@@ -356,5 +358,13 @@ namespace Common
         mDisplay = EGL_NO_DISPLAY;
         mContext = EGL_NO_CONTEXT;
         mSurface = EGL_NO_SURFACE;
+    }
+
+    void AndroidCoreImpl::keepDeviceAwake(bool keep)
+    {
+        ANativeActivity_setWindowFlags(
+                mAndroidApp->activity,
+                keep ? AWINDOW_FLAG_KEEP_SCREEN_ON : 0,
+                keep ? 0 : AWINDOW_FLAG_KEEP_SCREEN_ON);
     }
 }

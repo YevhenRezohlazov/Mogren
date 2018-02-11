@@ -28,6 +28,8 @@ namespace Common
         ///
         virtual void vibrateDevice(float vibrationDuration) = 0;
 
+        virtual void keepDeviceAwake(bool keep) = 0;
+
         virtual Math::Size2DI getScreenSize() const = 0;
 
         virtual std::string getLocaleName() const = 0;
