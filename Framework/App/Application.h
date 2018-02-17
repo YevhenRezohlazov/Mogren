@@ -84,7 +84,7 @@ namespace App
         virtual Animation::AnimationManager& getAnimationManager();
         std::shared_ptr<Graphics::RenderTarget> getDisplayRenderTarget();
 
-        virtual ~Application() = default;
+        virtual ~Application();
 
         static void setup(std::function< std::unique_ptr<Application>() > applicationCreator);
         static Application & getInstance();
@@ -97,5 +97,6 @@ namespace App
 
     private:
         static std::unique_ptr<Application> mInstance;
+        static Application* mRawInstance;
     };
 }

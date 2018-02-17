@@ -16,6 +16,7 @@
 namespace App
 {
     std::unique_ptr<Application> Application::mInstance;
+    Application* Application::mRawInstance;
 
     Application::Application()
     {
@@ -29,6 +30,8 @@ namespace App
         getResourceManager().addResourceLoader(std::make_unique<Graphics::Text::FontLoader>());
         getResourceManager().addResourceLoader(std::make_unique<Audio::SoundLoader>());
         getResourceManager().addResourceLoader(std::make_unique<Localization::LocalizedStringsLoader>());
+
+        mRawInstance = this;
     }
 
     void Application::onTouch(Common::TouchAction touchAction, const Math::Point2DI &position, int pointerId)
@@ -84,6 +87,11 @@ namespace App
         return mDisplayRenderTarget;
     }
 
+    Application::~Application()
+    {
+        mRawInstance = nullptr;
+    }
+
     void Application::terminate()
     {
         Common::getImpl<Common::NativeCoreInterface>().terminateApp();
@@ -136,7 +144,7 @@ namespace App
 
     Application & Application::getInstance()
     {
-        assert(mInstance != nullptr);
-        return *mInstance;
+        assert(mRawInstance != nullptr);
+        return *mRawInstance;
     }
 }
