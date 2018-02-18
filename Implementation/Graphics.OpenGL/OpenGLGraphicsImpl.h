@@ -15,6 +15,7 @@ namespace Graphics
     {
     public:
         OpenGLGraphicsImpl();
+        ~OpenGLGraphicsImpl();
 
         virtual void initialize() override;
 
@@ -41,8 +42,11 @@ namespace Graphics
 
         virtual Math::Size2DI getMaxTextureSize() const override;
 
+        static void reloadResources();
+
     private:
         std::unique_ptr<RendererImpl> mRenderer;
         Math::Size2DI mMaxTextureSize;
+        static OpenGLGraphicsImpl * mInstance;
     };
 }

@@ -23,6 +23,8 @@ namespace Graphics
 
         void bind(GLenum target = GL_RENDERBUFFER) const;
 
+        virtual void reload();
+
     protected:
         void deleteResource();
     };

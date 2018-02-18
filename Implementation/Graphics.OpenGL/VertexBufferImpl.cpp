@@ -1,4 +1,5 @@
 #include "VertexBufferImpl.h"
+#include <cstring>
 
 namespace Graphics
 {
@@ -7,6 +8,7 @@ namespace Graphics
         mGLBuffer.bind(GL_ARRAY_BUFFER);
         glBufferSubData(GL_ARRAY_BUFFER, offset, dataSize, data);
         CHECK_GL_ERROR();
+        std::memcpy(&mGLBuffer.getData()[offset], data, dataSize);
     }
 
     VertexBufferImpl::VertexBufferImpl(
@@ -18,9 +20,10 @@ namespace Graphics
         mVertexStructureSize = vertexStructureSize;
         mVertexStructureDesc = vertexStructureDesc;
 
-        mGLBuffer.init();
+        mGLBuffer.init(isDynamic);
         mGLBuffer.bind(GL_ARRAY_BUFFER);
         glBufferData(GL_ARRAY_BUFFER, vertexStructureSize * countElems, nullptr, isDynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
+        mGLBuffer.getData().resize(countElems * vertexStructureSize);
         CHECK_GL_ERROR();
     }
 

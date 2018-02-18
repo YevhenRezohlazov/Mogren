@@ -3,6 +3,7 @@
 #include "IndexBufferImpl.h"
 #include "TextureImpl.h"
 #include "ShaderProgramImpl.h"
+#include "ResourcesReloader.h"
 
 #include <Mogren/Framework/Common/ImplementationProvider.h>
 #include <Mogren/Framework/Common/NativeInterface/NativeCoreInterface.h>
@@ -12,8 +13,16 @@
 
 namespace Graphics
 {
+    OpenGLGraphicsImpl * OpenGLGraphicsImpl::mInstance = nullptr;
+
     OpenGLGraphicsImpl::OpenGLGraphicsImpl()
     {
+        mInstance = this;
+    }
+
+    OpenGLGraphicsImpl::~OpenGLGraphicsImpl()
+    {
+        mInstance = nullptr;
     }
 
     std::unique_ptr<NativeVertexBuffer> OpenGLGraphicsImpl::createVertexBuffer(
@@ -63,6 +72,12 @@ namespace Graphics
     Math::Size2DI OpenGLGraphicsImpl::getMaxTextureSize() const
     {
         return mMaxTextureSize;
+    }
+
+    void OpenGLGraphicsImpl::reloadResources()
+    {
+        mInstance->initialize();
+        ResourcesReloader::reloadResources();
     }
 
     void OpenGLGraphicsImpl::initialize()

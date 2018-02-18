@@ -28,6 +28,10 @@ namespace Graphics
 
         GLuint getId() const;
 
+        bool isInitialized() const;
+
+        virtual void reload() = 0;
+
         virtual ~GLResource();
 
     protected:

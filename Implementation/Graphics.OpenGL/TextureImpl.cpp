@@ -42,26 +42,8 @@ namespace Graphics
 
     void TextureImpl::finalize()
     {
-        GLuint textureId;
-        glGenTextures(1, &textureId);
-        CHECK_GL_ERROR();
-
-        GLenum format;
-
-        switch (mChannelsCount)
-        {
-        case 2: format = GL_LUMINANCE_ALPHA; break;
-        case 3: format = GL_RGB; break;
-        case 4: format = GL_RGBA; break;
-        default: format = GL_ALPHA; break;
-        }
-
-        glBindTexture(GL_TEXTURE_2D, textureId);
-        CHECK_GL_ERROR();
-        glTexImage2D(GL_TEXTURE_2D, 0, format, mWidth, mHeight, 0, format, GL_UNSIGNED_BYTE, mSourcePixels.data());
-        CHECK_GL_ERROR();
+        mGLTexture.init(mWidth, mHeight, mSourcePixels.data(), mChannelsCount);
         mSourcePixels.clear();
         mSourcePixels.shrink_to_fit();
-        mGLTexture.init(textureId);
     }
 }

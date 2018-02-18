@@ -14,6 +14,8 @@ namespace Graphics
         const std::string &fragmentShaderCode)
     {
         GLResource::init(false);
+        mVertexShaderCode = vertexShaderCode;
+        mFragmentShaderCode = fragmentShaderCode;
 
         GLuint vertexShader, fragmentShader;
         vertexShader = glCreateShader(GL_VERTEX_SHADER);
@@ -136,11 +138,6 @@ namespace Graphics
         return true;
     }
 
-    void GLProgram::init(GLuint id, bool suppressDeletion)
-    {
-        GLResource::init(id, suppressDeletion);
-    }
-
     GLProgram::GLProgram()
     {
     }
@@ -193,5 +190,14 @@ namespace Graphics
         }
 
         return res;
+    }
+
+    void GLProgram::reload()
+    {
+        glDeleteProgram(mId);
+        glGetError(); // Ignore error if any
+        mId = (GLuint)-1;
+        mInited = false;
+        init(mVertexShaderCode, mFragmentShaderCode);
     }
 }

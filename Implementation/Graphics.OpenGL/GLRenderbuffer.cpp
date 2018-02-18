@@ -1,4 +1,5 @@
 #include "GLRenderbuffer.h"
+#include <Mogren/Framework/Logging/Logger.h>
 
 namespace Graphics
 {
@@ -23,6 +24,11 @@ namespace Graphics
         checkInited();
         glBindRenderbuffer(target, mId);
         CHECK_GL_ERROR();
+    }
+
+    void GLRenderbuffer::reload()
+    {
+        Logging::Logger::writeError("Cannot reload renderbuffers");
     }
 
     void GLRenderbuffer::deleteResource()

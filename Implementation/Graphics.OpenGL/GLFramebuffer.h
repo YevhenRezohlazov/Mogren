@@ -23,6 +23,8 @@ namespace Graphics
 
         void bind(GLenum target = GL_FRAMEBUFFER) const;
 
+        virtual void reload() override;
+
     protected:
         void deleteResource();
     };

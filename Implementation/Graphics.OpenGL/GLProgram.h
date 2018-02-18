@@ -17,8 +17,6 @@ namespace Graphics
         GLProgram(const GLProgram&) = delete;
         GLProgram& operator=(const GLProgram&) = delete;
 
-        void init(GLuint id, bool suppressDeletion = false);
-
         bool init(
             const std::string &vertexShaderCode,
             const std::string &fragmentShaderCode);
@@ -32,8 +30,14 @@ namespace Graphics
         ///
         std::unordered_map<std::string, GLint> getVertexAttributes() const;
 
+        virtual void reload() override;
+
     protected:
         void deleteResource();
+
+    private:
+        std::string mVertexShaderCode;
+        std::string mFragmentShaderCode;
     };
 }
 

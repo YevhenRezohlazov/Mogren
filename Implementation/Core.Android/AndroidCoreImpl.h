@@ -65,6 +65,7 @@ namespace Common
         EGLDisplay mDisplay;
         EGLSurface mSurface;
         EGLContext mContext;
+        bool mAppInitialized = false;
         bool mDrawing;
 
 		std::function<void() > mInitializationCallback;

@@ -1,5 +1,6 @@
 #include "AndroidCoreImpl.h"
 #include <Mogren/Framework/Logging/Logger.h>
+#include <Mogren/Implementation/Graphics.OpenGL/OpenGLGraphicsImpl.h>
 #include <cassert>
 #include <android/native_activity.h>
 #include <android/window.h>
@@ -168,7 +169,12 @@ namespace Common
                 if (app->window != NULL)
                 {
                     that->initEGL();
-                    that->mInitializationCallback();
+                    if (!that->mAppInitialized) {
+                        that->mInitializationCallback();
+                        that->mAppInitialized = true;
+                    } else {
+                        Graphics::OpenGLGraphicsImpl::reloadResources();
+                    }
                     that->mDrawing = true;
                     that->render();
                 }
@@ -177,7 +183,6 @@ namespace Common
                 // The window is being hidden or closed, clean it up.
                 Logging::Logger::writeInfo("ANDROID COMMAND APP_CMD_TERM_WINDOW");
                 that->mDrawing = false;
-                that->mTerminationCallback();
                 that->destroyEGL();
                 break;
             case APP_CMD_GAINED_FOCUS:
@@ -203,6 +208,8 @@ namespace Common
                 break;
             case APP_CMD_DESTROY:
                 Logging::Logger::writeInfo("ANDROID COMMAND APP_CMD_DESTROY");
+                that->mTerminationCallback();
+                that->mAppInitialized = false;
                 break;
             case APP_CMD_CONFIG_CHANGED:
                 Logging::Logger::writeInfo("ANDROID COMMAND APP_CMD_CONFIG_CHANGED");

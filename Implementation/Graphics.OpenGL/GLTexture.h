@@ -3,6 +3,8 @@
 #include <Mogren/Framework/Graphics/PrimitiveTypes/TextureFilter.h>
 #include <Mogren/Framework/Graphics/PrimitiveTypes/TextureWrapMode.h>
 #include "GLResource.h"
+#include <stdint.h>
+#include <vector>
 
 namespace Graphics
 {
@@ -18,9 +20,7 @@ namespace Graphics
 
         explicit GLTexture(GLenum target);
 
-        void init(bool suppressDeletion = false);
-
-        void init(GLuint id, bool suppressDeletion = false);
+        void init(int width, int height, const uint8_t * sourcePixels, int channelsCount);
 
         void bind() const;
 
@@ -31,11 +31,19 @@ namespace Graphics
             Graphics::TextureWrapMode wrapU,
             Graphics::TextureWrapMode wrapV) const;
 
+        virtual void reload() override;
+
     protected:
         void deleteResource();
 
     private:
         GLenum mBindTarget;
+
+        int mWidth;
+        int mHeight;
+
+        std::vector<uint8_t> mSourcePixels;
+        int mChannelsCount;
     };
 }
 

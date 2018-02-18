@@ -28,6 +28,14 @@ namespace Logging
 
         static void write(LogMessageType type, const char * format, va_list argList)
         {
+            {
+                std::lock_guard<std::mutex> lock(gMutex);
+                if (gLogWriters.empty())
+                {
+                    return;
+                }
+            }
+
             char * outBuffer;
             char * buffer;
             switch (type)

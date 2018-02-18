@@ -3,6 +3,7 @@
 #include <Mogren/Framework/Graphics/NativeInterface/NativeIndexBuffer.h>
 #include "GLBuffer.h"
 #include <stdint.h>
+#include <vector>
 
 namespace Graphics
 {
