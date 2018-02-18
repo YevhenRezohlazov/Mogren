@@ -32,6 +32,8 @@ namespace Input
     {
         std::lock_guard<std::mutex> lock(mTouchQueueMutex);
 
+        bool touchDispatched = false;
+
         for (auto& elem : mTouchQueue)
         {
             // ignore Move and Up events if no input box is focused
@@ -39,37 +41,51 @@ namespace Input
 
             auto& cameras = elem.mRenderTarget->getAttachedCameras();
 
-            if (mFocusedRenderTarget && mFocusedRenderTarget != elem.mRenderTarget.get()) continue;
+            if (mFocusedRenderTarget == nullptr || mFocusedRenderTarget == elem.mRenderTarget.get()) {
+                for (Graphics::Camera &camera : cameras) {
+                    if (mFocusedCamera && mFocusedCamera != &camera) continue;
 
-            for (Graphics::Camera & camera : cameras)
+                    const Math::Point3DF nearScreenPosition(
+                            (elem.mPosition.x - camera.getViewport().mLeft) /
+                            float(camera.getViewport().mWidth) * 2.0f - 1.0f,
+                            -(elem.mPosition.y - camera.getViewport().mTop) /
+                            float(camera.getViewport().mHeight) * 2.0f + 1.0f,
+                            1.0f);
+
+                    const Math::Point3DF farScreenPosition(nearScreenPosition.x,
+                                                           nearScreenPosition.y, -1.0f);
+
+                    // check if touch is inside the viewport
+                    if (elem.mAction == TouchAction::Down &&
+                        (nearScreenPosition.x < -1.0f || nearScreenPosition.x > 1.0f ||
+                         nearScreenPosition.y < -1.0f || nearScreenPosition.y > 1.0f)) {
+                        continue;
+                    }
+
+                    Common::SceneItem *rootItem = &camera;
+                    while (rootItem->hasParent()) {
+                        rootItem = &rootItem->getParent();
+                    }
+
+                    auto viewProjMatrix = camera.getViewProjectionMatrix();
+                    if (dispatchTouch(*elem.mRenderTarget, camera, *rootItem, elem, viewProjMatrix,
+                                      nearScreenPosition, farScreenPosition)) {
+                        touchDispatched = true;
+                        // stop dispatching
+                        break;
+                    }
+                }
+            }
+
+            if (!touchDispatched)
             {
-                if (mFocusedCamera && mFocusedCamera != &camera) continue;
-                
-                const Math::Point3DF nearScreenPosition(
-                    (elem.mPosition.x - camera.getViewport().mLeft) / float(camera.getViewport().mWidth) * 2.0f - 1.0f,
-                    -(elem.mPosition.y - camera.getViewport().mTop) / float(camera.getViewport().mHeight) * 2.0f + 1.0f,
-                    1.0f);
-
-                const Math::Point3DF farScreenPosition(nearScreenPosition.x, nearScreenPosition.y, -1.0f);
-
-                // check if touch is inside the viewport
-                if (elem.mAction == TouchAction::Down &&
-                    (nearScreenPosition.x < -1.0f || nearScreenPosition.x > 1.0f || nearScreenPosition.y < -1.0f || nearScreenPosition.y > 1.0f))
+                if (mFocusedInputBox != nullptr && elem.mAction == TouchAction::Up)
                 {
-                    continue;
-                }
-
-                Common::SceneItem *rootItem = &camera;
-                while (rootItem->hasParent())
-                {
-                    rootItem = &rootItem->getParent();
-                }
-
-                auto viewProjMatrix = camera.getViewProjectionMatrix();
-                if (dispatchTouch(*elem.mRenderTarget, camera, *rootItem, elem, viewProjMatrix, nearScreenPosition, farScreenPosition))
-                {
-                    // stop dispatching
-                    break;
+                    Logging::Logger::writeError("Touch not dispatched while input box is in focus. Clearing focus.");
+                    mFocusedRenderTarget = nullptr;
+                    mFocusedCamera = nullptr;
+                    mFocusedInputBox = nullptr;
+                    mFocusedTouchCount = 0;
                 }
             }
         }

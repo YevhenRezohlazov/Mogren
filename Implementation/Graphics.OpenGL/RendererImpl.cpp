@@ -25,7 +25,7 @@ namespace Graphics
         auto & impl = static_cast<const RenderTargetImpl&>(renderTarget);
         impl.getGLFrameBuffer().bind();
         glViewport(viewport.mLeft, renderTarget.getHeight() - (viewport.mTop + viewport.mHeight), viewport.mWidth, viewport.mHeight);
-        Logging::Logger::writeInfo("RendererImpl::prepareRender");
+
         if (clear)
         {
             glClearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
@@ -38,7 +38,6 @@ namespace Graphics
         const NativeShaderProgram & nativeShaderProgram,
         const NativeShaderParameterSet & nativeShaderParameterSet)
     {
-        Logging::Logger::writeInfo("RendererImpl::render");
         auto & shaderProgram = static_cast<const ShaderProgramImpl&>(nativeShaderProgram);
         shaderProgram.getGLProgram().use();
 
@@ -138,6 +137,5 @@ namespace Graphics
 
     void RendererImpl::finishRender()
     {
-        Logging::Logger::writeInfo("RendererImpl::finishRender");
     }
 }

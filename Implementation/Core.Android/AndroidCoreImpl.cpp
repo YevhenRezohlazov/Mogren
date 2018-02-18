@@ -9,6 +9,7 @@ namespace Common
 {
 	AndroidCoreImpl::AndroidCoreImpl()
 	{
+        mGLContext = ndk_helper::GLContext::GetInstance();
 	}
 
 	AndroidCoreImpl::~AndroidCoreImpl()
@@ -96,7 +97,7 @@ namespace Common
 
     Math::Size2DI AndroidCoreImpl::getScreenSize() const
     {
-        return mScreenSize;
+        return Math::Size2DI(mGLContext->GetScreenWidth(), mGLContext->GetScreenHeight());
     }
 
     std::string AndroidCoreImpl::getLocaleName() const
@@ -134,7 +135,7 @@ namespace Common
 
                 // Check if we are exiting.
                 if (app->destroyRequested != 0) {
-                    destroyEGL();
+                    mGLContext->Suspend();
                     return;
                 }
             }
@@ -168,13 +169,7 @@ namespace Common
                 // The window is being shown, get it ready.
                 if (app->window != NULL)
                 {
-                    that->initEGL();
-                    if (!that->mAppInitialized) {
-                        that->mInitializationCallback();
-                        that->mAppInitialized = true;
-                    } else {
-                        Graphics::OpenGLGraphicsImpl::reloadResources();
-                    }
+                    that->initApp(app);
                     that->mDrawing = true;
                     that->render();
                 }
@@ -183,7 +178,7 @@ namespace Common
                 // The window is being hidden or closed, clean it up.
                 Logging::Logger::writeInfo("ANDROID COMMAND APP_CMD_TERM_WINDOW");
                 that->mDrawing = false;
-                that->destroyEGL();
+                that->mGLContext->Suspend();
                 break;
             case APP_CMD_GAINED_FOCUS:
                 Logging::Logger::writeInfo("ANDROID COMMAND APP_CMD_GAINED_FOCUS");
@@ -210,6 +205,7 @@ namespace Common
                 Logging::Logger::writeInfo("ANDROID COMMAND APP_CMD_DESTROY");
                 that->mTerminationCallback();
                 that->mAppInitialized = false;
+                that->mGLContext->Invalidate();
                 break;
             case APP_CMD_CONFIG_CHANGED:
                 Logging::Logger::writeInfo("ANDROID COMMAND APP_CMD_CONFIG_CHANGED");
@@ -253,118 +249,34 @@ namespace Common
 
     void AndroidCoreImpl::render()
     {
-        if (mDisplay == nullptr)
-        {
-            // No display.
-            return;
-        }
-
         mRenderCallback();
-        eglSwapBuffers(mDisplay, mSurface);
+
+        if (EGL_SUCCESS != mGLContext->Swap()) {
+            Graphics::OpenGLGraphicsImpl::reloadResources();
+        }
     }
 
-    void AndroidCoreImpl::initEGL()
+    void AndroidCoreImpl::initApp(android_app *app)
     {
-        const EGLint attribs[] = {
-                EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
-                EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
-                EGL_BLUE_SIZE, 8,
-                EGL_GREEN_SIZE, 8,
-                EGL_RED_SIZE, 8,
-                EGL_NONE
-        };
-
-        EGLint w, h, format;
-        EGLint numConfigs;
-        EGLConfig config;
-
-        mDisplay = eglGetDisplay(EGL_DEFAULT_DISPLAY);
-
-        eglInitialize(mDisplay, 0, 0);
-
-        /* Here, the application chooses the configuration it desires.
-         * find the best match if possible, otherwise use the very first one
-         */
-        eglChooseConfig(mDisplay, attribs, nullptr,0, &numConfigs);
-        std::unique_ptr<EGLConfig[]> supportedConfigs(new EGLConfig[numConfigs]);
-        assert(supportedConfigs);
-        eglChooseConfig(mDisplay, attribs, supportedConfigs.get(), numConfigs, &numConfigs);
-        assert(numConfigs);
-
-        int i = 0;
-        for (; i < numConfigs; i++)
-        {
-            auto& cfg = supportedConfigs[i];
-            EGLint r, g, b, d;
-            if (eglGetConfigAttrib(mDisplay, cfg, EGL_RED_SIZE, &r)   &&
-                eglGetConfigAttrib(mDisplay, cfg, EGL_GREEN_SIZE, &g) &&
-                eglGetConfigAttrib(mDisplay, cfg, EGL_BLUE_SIZE, &b)  &&
-                eglGetConfigAttrib(mDisplay, cfg, EGL_DEPTH_SIZE, &d) &&
-                r == 8 && g == 8 && b == 8 && d == 0 )
-            {
-                config = supportedConfigs[i];
-                break;
+        if (!mAppInitialized) {
+            mGLContext->Init(app->window);
+            mInitializationCallback();
+            mAppInitialized = true;
+        } else if(app->window != mGLContext->GetANativeWindow()) {
+            // Re-initialize ANativeWindow.
+            // On some devices, ANativeWindow is re-created when the app is resumed
+            assert(mGLContext->GetANativeWindow());
+            mGLContext->Invalidate();
+            mGLContext->Init(app->window);
+            Graphics::OpenGLGraphicsImpl::reloadResources();
+        } else {
+            // initialize OpenGL ES and EGL
+            if (EGL_SUCCESS == mGLContext->Resume(app->window)) {
+                Graphics::OpenGLGraphicsImpl::reloadResources();
+            } else {
+                assert(0);
             }
         }
-
-        if (i == numConfigs)
-        {
-            config = supportedConfigs[0];
-        }
-
-        /* EGL_NATIVE_VISUAL_ID is an attribute of the EGLConfig that is
-         * guaranteed to be accepted by ANativeWindow_setBuffersGeometry().
-         * As soon as we picked a EGLConfig, we can safely reconfigure the
-         * ANativeWindow buffers to match, using EGL_NATIVE_VISUAL_ID. */
-        eglGetConfigAttrib(mDisplay, config, EGL_NATIVE_VISUAL_ID, &format);
-        mSurface = eglCreateWindowSurface(mDisplay, config, mAndroidApp->window, NULL);
-        const EGLint attrib_list [] = {EGL_CONTEXT_CLIENT_VERSION, 2, EGL_NONE};
-        mContext = eglCreateContext(mDisplay, config, NULL, attrib_list);
-
-        if (eglMakeCurrent(mDisplay, mSurface, mSurface, mContext) == EGL_FALSE)
-        {
-            assert("Unable to eglMakeCurrent");
-        }
-
-        eglQuerySurface(mDisplay, mSurface, EGL_WIDTH, &w);
-        eglQuerySurface(mDisplay, mSurface, EGL_HEIGHT, &h);
-
-        mScreenSize = Math::Size2DI(w, h);
-
-        // Check openGL on the system
-        auto opengl_info = {GL_VENDOR, GL_RENDERER, GL_VERSION, GL_EXTENSIONS};
-
-        for (auto name : opengl_info)
-        {
-            auto info = glGetString(name);
-            Logging::Logger::writeInfo("OpenGL Info: %s", info);
-        }
-        // Initialize GL state.
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    }
-
-    void AndroidCoreImpl::destroyEGL()
-    {
-        if (mDisplay != EGL_NO_DISPLAY)
-        {
-            eglMakeCurrent(mDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
-            if (mContext != EGL_NO_CONTEXT)
-            {
-                eglDestroyContext(mDisplay, mContext);
-            }
-
-            if (mSurface != EGL_NO_SURFACE)
-            {
-                eglDestroySurface(mDisplay, mSurface);
-            }
-
-            eglTerminate(mDisplay);
-        }
-
-        mDisplay = EGL_NO_DISPLAY;
-        mContext = EGL_NO_CONTEXT;
-        mSurface = EGL_NO_SURFACE;
     }
 
     void AndroidCoreImpl::keepDeviceAwake(bool keep)

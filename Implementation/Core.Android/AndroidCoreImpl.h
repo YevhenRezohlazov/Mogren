@@ -11,6 +11,8 @@
 #include <EGL/egl.h>
 #include <GLES/gl.h>
 
+#include "GLContext.h"
+
 namespace Common
 {
 	class AndroidCoreImpl : public Common::NativeCoreInterface
@@ -53,18 +55,13 @@ namespace Common
         static void handleAndroidCommand(android_app* app, int32_t cmd);
         static int32_t handleAndroidInput(android_app* app, AInputEvent* event);
 
-        void initEGL();
-        void destroyEGL();
+        void initApp(android_app *app);
         void render();
 
     private:
         android_app* mAndroidApp;
+        ndk_helper::GLContext * mGLContext;
 
-        Math::Size2DI mScreenSize;
-
-        EGLDisplay mDisplay;
-        EGLSurface mSurface;
-        EGLContext mContext;
         bool mAppInitialized = false;
         bool mDrawing;
 
