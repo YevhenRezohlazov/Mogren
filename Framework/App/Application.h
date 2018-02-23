@@ -10,6 +10,7 @@
 #include <memory>
 #include <functional>
 #include <mutex>
+#include <atomic>
 
 namespace Graphics
 {
@@ -96,6 +97,7 @@ namespace App
         std::shared_ptr<Graphics::RenderTarget> mDisplayRenderTarget;
 
     private:
+        std::atomic<bool> mBackButtonPressed;
         static std::unique_ptr<Application> mInstance;
         static Application* mRawInstance;
     };

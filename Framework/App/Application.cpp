@@ -20,6 +20,8 @@ namespace App
 
     Application::Application()
     {
+        mBackButtonPressed = false;
+
         Common::getImpl<Graphics::NativeGraphicsInterface>().initialize();
 
         mDisplayRenderTarget = std::make_shared<Graphics::RenderTarget>(
@@ -100,6 +102,7 @@ namespace App
     void Application::prerender()
     {
         getResourceManager().finalizeResources();
+        if (mBackButtonPressed.exchange(false)) onBackButtonPress();
         Input::InputManager::dispatchTouches();
         getAnimationManager().performAnimations(getTimeManager().getDeltaTime());
     }
@@ -136,7 +139,7 @@ namespace App
         nativeInterface.setTouchInputCallback(
             [](Common::TouchAction action, const Math::Point2DI position, int pointerId)
             { if (mInstance) { mInstance->onTouch(action, position, pointerId); } });
-        nativeInterface.setBackButtonCallback([]() { if (mInstance) mInstance->onBackButtonPress(); });
+        nativeInterface.setBackButtonCallback([]() { if (mInstance) mInstance->mBackButtonPressed = true; });
 
         nativeInterface.setPauseCallback([]() { if (mInstance) mInstance->onPause(); });
         nativeInterface.setResumeCallback([]() { if (mInstance) mInstance->onResume(); });
