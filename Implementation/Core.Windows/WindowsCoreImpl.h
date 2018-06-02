@@ -55,6 +55,7 @@ namespace Common
 
         virtual void vibrateDevice(float vibrationDuration);
         virtual void keepDeviceAwake(bool keep);
+        virtual void showInterstitialAd();
     private:
         static WindowsCoreImpl* mInstance;
 

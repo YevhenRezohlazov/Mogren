@@ -279,6 +279,11 @@ namespace Common
         // do nothing on windows
     }
 
+    void WindowsCoreImpl::showInterstitialAd()
+    {
+        // Not implemented
+    }
+
     std::string WindowsCoreImpl::getLocaleName() const
     {
         return "";

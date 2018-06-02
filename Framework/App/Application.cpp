@@ -54,6 +54,11 @@ namespace App
         Common::getImpl<Common::NativeCoreInterface>().vibrateDevice(vibrationDuration);
     }
 
+    void Application::showInterstitialAd()
+    {
+        Common::getImpl<Common::NativeCoreInterface>().showInterstitialAd();
+    }
+
     const Common::TimeManager& Application::getTimeManager() const
     {
         return mTimeManager;

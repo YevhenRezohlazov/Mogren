@@ -39,6 +39,8 @@ namespace Common
 		///
 		virtual void vibrateDevice(float vibrationDuration) override;
 
+		virtual void showInterstitialAd() override;
+
 		virtual void keepDeviceAwake(bool keep) override;
 
 		virtual Math::Size2DI getScreenSize() const override;
