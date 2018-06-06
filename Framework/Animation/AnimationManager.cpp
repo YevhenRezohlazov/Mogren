@@ -92,6 +92,7 @@ namespace Animation
                 else if (loopCompleted)
                 {
                     controller->mAnimator->onFinished(AnimationFinishEvent::LoopCompleted);
+                    controller->mCurrentTime = 0.0;
                 }
             }
         }
