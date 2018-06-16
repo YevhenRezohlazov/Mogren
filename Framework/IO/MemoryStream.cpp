@@ -81,6 +81,19 @@ namespace IO
         return 0;
     }
 
+    void MemoryStream::resize(uint32_t newSize)
+    {
+        if (canWrite())
+        {
+            mBuffer.resize(newSize);
+
+            if (mPosition > mBuffer.size())
+            {
+                mPosition = mBuffer.size();
+            }
+        }
+    }
+
     MemoryStream MemoryStream::clone() const
     {
         return MemoryStream(getData(), mBuffer.size());

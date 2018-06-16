@@ -47,6 +47,8 @@ namespace IO
 
         virtual uint32_t write(const void *buffer, uint32_t count) override;
 
+        void resize(uint32_t newSize);
+
     private:
         std::vector<char> mBuffer;
         uint32_t mPosition;
