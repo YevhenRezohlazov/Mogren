@@ -35,6 +35,11 @@ namespace Common
 
         Math::Vector3DF getScale() const;
 
+        ///
+        /// Creates a copy of the transformation instance
+        ///
+        std::unique_ptr<Transformation> clone() const override;
+
     private:
         Math::Vector3DF mScale = Math::Vector3DF(1.0f);
     };

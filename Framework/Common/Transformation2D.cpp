@@ -71,4 +71,12 @@ namespace Common
 
         return *this;
     }
+    std::unique_ptr<Transformation> Transformation2D::clone() const
+    {
+        auto outTransform = std::make_unique<Transformation2D>();
+        outTransform->mMatrix = getMatrix();
+        outTransform->mRotationAngle = mRotationAngle;
+        outTransform->mScale = mScale;
+        return std::move(outTransform);
+    }
 }

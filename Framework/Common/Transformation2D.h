@@ -47,6 +47,11 @@ namespace Common
         ///
         Transformation2D& setScale(const Math::Vector2DF &scale);
 
+        ///
+        /// Creates a copy of the transformation instance
+        ///
+        std::unique_ptr<Transformation> clone() const override;
+
     private:
         ///
         /// The rotation angle (in radians)

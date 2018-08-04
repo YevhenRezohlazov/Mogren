@@ -11,6 +11,14 @@ namespace Common
         return mVersion;
     }
 
+    std::unique_ptr<Transformation> Transformation::clone() const
+    {
+        auto outTransform = std::unique_ptr<Transformation>();
+        outTransform->mMatrix = mMatrix;
+        outTransform->mVersion = mVersion;
+        return outTransform;
+    }
+
     void Transformation::incrementVersion()
     {
         mVersion += 1;

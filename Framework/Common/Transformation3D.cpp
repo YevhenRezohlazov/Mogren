@@ -138,4 +138,11 @@ namespace Common
     {
         return mScale;
     }
+    std::unique_ptr<Transformation> Transformation3D::clone() const
+    {
+        auto outTransform = std::make_unique<Transformation3D>();
+        outTransform->mMatrix = getMatrix();
+        outTransform->mScale = mScale;
+        return std::move(outTransform);
+    }
 }

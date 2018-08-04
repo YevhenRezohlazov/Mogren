@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Mogren/Framework/Math/Matrix4x4.h>
+#include <memory>
 
 namespace Common
 {
@@ -25,6 +26,11 @@ namespace Common
         /// (call to check whether the transformation has been changed since last version)
         ///
         const uint64_t& getVersion() const;
+
+        ///
+        /// Creates a copy of the transformation instance
+        ///
+        virtual std::unique_ptr<Transformation> clone() const;
 
         virtual ~Transformation() = default;
 
