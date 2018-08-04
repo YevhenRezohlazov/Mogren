@@ -29,7 +29,7 @@ namespace Settings
         virtual uint32_t getVersion() const;
 
     protected:
-        uint32_t getLoadingSettingsVersion() const;
+        uint32_t getMaxSettingsVersion() const;
 
         ///
         /// Returns the input stream to read settings from.
@@ -78,7 +78,7 @@ namespace Settings
         IO::InputStream *mInputStream;
         IO::OutputStream *mOutputStream;
 
-        uint32_t mLoadingSettingsVersion;
+        uint32_t mMaxSettingsVersion;
         bool mIsSaving;
     };
 
