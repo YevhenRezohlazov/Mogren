@@ -41,6 +41,8 @@ namespace Common
 
 		virtual void showInterstitialAd() override;
 
+		virtual void openUrl(const std::string & url) override;
+
 		virtual void keepDeviceAwake(bool keep) override;
 
 		virtual Math::Size2DI getScreenSize() const override;

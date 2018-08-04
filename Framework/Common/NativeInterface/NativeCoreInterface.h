@@ -30,6 +30,8 @@ namespace Common
 
         virtual void showInterstitialAd() = 0;
 
+        virtual void openUrl(const std::string & url) = 0;
+
         virtual void keepDeviceAwake(bool keep) = 0;
 
         virtual Math::Size2DI getScreenSize() const = 0;

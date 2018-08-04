@@ -128,6 +128,40 @@ namespace Common
             jvm->DetachCurrentThread();
     }
 
+    void AndroidCoreImpl::openUrl(const std::string & url)
+    {
+        auto jvm = mAndroidApp->activity->vm;
+        assert(jvm);
+
+        JNIEnv *jniEnv = nullptr;
+
+        bool attached = false;
+        switch (jvm->GetEnv((void**)&jniEnv, JNI_VERSION_1_6))
+        {
+            case JNI_OK:
+                break;
+            case JNI_EDETACHED:
+                if (jvm->AttachCurrentThread(&jniEnv, nullptr)!=0)
+                {
+                    assert("Could not attach current thread");
+                }
+                attached = true;
+                break;
+            case JNI_EVERSION:
+                assert("Invalid java version");
+                return;
+        }
+
+        assert(jniEnv);
+        jclass activityClass = jniEnv->GetObjectClass(mAndroidApp->activity->clazz);
+        jmethodID methodId = jniEnv->GetMethodID(activityClass, "openURL", "(Ljava/lang/String;)V");
+        jstring jurl = jniEnv->NewStringUTF(url.c_str());
+        jniEnv->CallVoidMethod(mAndroidApp->activity->clazz, methodId, jurl);
+        jniEnv->DeleteLocalRef(jurl);
+        if (attached)
+            jvm->DetachCurrentThread();
+    }
+
     Math::Size2DI AndroidCoreImpl::getScreenSize() const
     {
         return Math::Size2DI(mGLContext->GetScreenWidth(), mGLContext->GetScreenHeight());

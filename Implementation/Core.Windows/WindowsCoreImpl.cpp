@@ -284,6 +284,11 @@ namespace Common
         // Not implemented
     }
 
+    void WindowsCoreImpl::openUrl(const std::string & url)
+    {
+        ShellExecuteA(0, 0, url.c_str(), 0, 0, SW_SHOW);
+    }
+
     std::string WindowsCoreImpl::getLocaleName() const
     {
         return "";

@@ -77,6 +77,7 @@ namespace App
         void keepDeviceAwake(bool keep);
         void vibrateDevice(float vibrationDuration);
         void showInterstitialAd();
+        void openUrl(const std::string & url);
 
         virtual const Common::TimeManager& getTimeManager() const;
         virtual Common::TimeManager& getTimeManager();

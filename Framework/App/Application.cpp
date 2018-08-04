@@ -59,6 +59,11 @@ namespace App
         Common::getImpl<Common::NativeCoreInterface>().showInterstitialAd();
     }
 
+    void Application::openUrl(const std::string & url)
+    {
+        Common::getImpl<Common::NativeCoreInterface>().openUrl(url);
+    }
+
     const Common::TimeManager& Application::getTimeManager() const
     {
         return mTimeManager;
