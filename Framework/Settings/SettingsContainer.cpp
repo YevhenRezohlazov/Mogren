@@ -51,7 +51,8 @@ namespace Settings
     {
         mInputStream = &stream;
         mIsSaving = false;
-        stream.read(&mMaxSettingsVersion, sizeof(mMaxSettingsVersion));
+        uint32_t version = 0;
+        stream.read(&version, sizeof(version));
         saveOrLoadSettings();
     }
 
@@ -59,24 +60,13 @@ namespace Settings
     {
         mOutputStream = &stream;
         mIsSaving = true;
-        auto version = getVersion();
+        const uint32_t version = 1;
         stream.write(&version, sizeof(version));
-        mMaxSettingsVersion = version;
         saveOrLoadSettings();
     }
 
-    uint32_t SettingsContainer::getVersion() const
-    {
-        return 0;
-    }
-
-    uint32_t SettingsContainer::getMaxSettingsVersion() const
-    {
-        return mMaxSettingsVersion;
-    }
-
     SettingsContainer::SettingsContainer()
-        : mInputStream(nullptr), mOutputStream(nullptr), mMaxSettingsVersion(0U), mIsSaving(false)
+        : mInputStream(nullptr), mOutputStream(nullptr), mIsSaving(false)
     {
     }
 }

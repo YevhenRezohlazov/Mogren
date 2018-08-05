@@ -23,14 +23,7 @@ namespace Settings
         ///
         void saveSettings(IO::OutputStream &stream);
 
-        ///
-        /// Returns the settings version (should be baseClass::getVersion() + 1).
-        ///
-        virtual uint32_t getVersion() const;
-
     protected:
-        uint32_t getMaxSettingsVersion() const;
-
         ///
         /// Returns the input stream to read settings from.
         ///
@@ -78,7 +71,6 @@ namespace Settings
         IO::InputStream *mInputStream;
         IO::OutputStream *mOutputStream;
 
-        uint32_t mMaxSettingsVersion;
         bool mIsSaving;
     };
 
@@ -91,7 +83,8 @@ namespace Settings
         }
         else
         {
-            loadSetting(setting);
+            if (getInputStream().getPosition() < getInputStream().getLength())
+                loadSetting(setting);
         }
     }
 
