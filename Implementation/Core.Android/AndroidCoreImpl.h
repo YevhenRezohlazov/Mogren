@@ -69,6 +69,9 @@ namespace Common
         bool mAppInitialized = false;
         bool mDrawing;
 
+		double mFpsLastTimestamp = 0.0;
+		int mFrameCountSinceLastTimestamp = 0;
+
 		std::function<void() > mInitializationCallback;
 		std::function<void() > mRenderCallback;
 		std::function<void(Common::TouchAction, const Math::Point2DI&, int)> mTouchInputCallback;

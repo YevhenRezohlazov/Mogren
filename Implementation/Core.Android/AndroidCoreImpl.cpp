@@ -4,9 +4,20 @@
 #include <cassert>
 #include <android/native_activity.h>
 #include <android/window.h>
+#include <time.h>
 
 namespace Common
 {
+    namespace
+    {
+        double getCurrentTime()
+        {
+            timespec ts;
+            clock_gettime(CLOCK_REALTIME, &ts);
+            return static_cast<double>(ts.tv_sec) + static_cast<double>(ts.tv_nsec) / 1e9;
+        }
+    }
+
 	AndroidCoreImpl::AndroidCoreImpl()
 	{
         mGLContext = ndk_helper::GLContext::GetInstance();
@@ -182,6 +193,7 @@ namespace Common
         app->onInputEvent = handleAndroidInput;
         app->userData = this;
         mDrawing = false;
+        mFpsLastTimestamp = getCurrentTime();
 
         while (1)
         {
@@ -208,6 +220,16 @@ namespace Common
             }
 
             render();
+            ++mFrameCountSinceLastTimestamp;
+            const double currentTime = getCurrentTime();
+            if (currentTime - mFpsLastTimestamp >= 1.0)
+            {
+                Logging::Logger::writeInfo(
+                        "FPS: %.1lf",
+                        static_cast<double>(mFrameCountSinceLastTimestamp) / (currentTime - mFpsLastTimestamp));
+                mFpsLastTimestamp = currentTime;
+                mFrameCountSinceLastTimestamp = 0;
+            }
         }
     }
 
