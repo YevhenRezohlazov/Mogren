@@ -35,6 +35,7 @@ namespace Animation
         /// \param finishEvent The animation finish event (completed, canceled or looped).
         virtual void onFinished(AnimationFinishEvent finishEvent);
 
+        virtual ~Animator() = default;
     private:
         bool mUsesTime;
     };
