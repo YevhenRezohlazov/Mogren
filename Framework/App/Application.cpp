@@ -59,6 +59,11 @@ namespace App
         Common::getImpl<Common::NativeCoreInterface>().showInterstitialAd();
     }
 
+    void Application::showVideoAd()
+    {
+        Common::getImpl<Common::NativeCoreInterface>().showVideoAd();
+    }
+
     void Application::openUrl(const std::string & url)
     {
         Common::getImpl<Common::NativeCoreInterface>().openUrl(url);

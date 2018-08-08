@@ -56,6 +56,7 @@ namespace Common
         virtual void vibrateDevice(float vibrationDuration);
         virtual void keepDeviceAwake(bool keep);
         virtual void showInterstitialAd();
+        virtual void showVideoAd();
         virtual void openUrl(const std::string & url);
     private:
         static WindowsCoreImpl* mInstance;

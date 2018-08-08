@@ -41,6 +41,8 @@ namespace Common
 
 		virtual void showInterstitialAd() override;
 
+        virtual void showVideoAd() override;
+
 		virtual void openUrl(const std::string & url) override;
 
 		virtual void keepDeviceAwake(bool keep) override;
@@ -56,6 +58,8 @@ namespace Common
         AAssetManager* getAssetManager();
 
 	private:
+        void callVoidJavaMethod(const std::string & methodName);
+
         static void handleAndroidCommand(android_app* app, int32_t cmd);
         static int32_t handleAndroidInput(android_app* app, AInputEvent* event);
 
