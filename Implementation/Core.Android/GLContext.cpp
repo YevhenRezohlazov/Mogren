@@ -23,6 +23,7 @@
 #include "GLContext.h"
 
 #include <string.h>
+#include <string>
 #include <unistd.h>
 #include <Mogren/Framework/Logging/Logger.h>
 

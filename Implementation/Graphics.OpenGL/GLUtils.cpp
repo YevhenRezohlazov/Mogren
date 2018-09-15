@@ -3,6 +3,7 @@
 
 #include <Mogren/Framework/Logging/Logger.h>
 #include <assert.h>
+#include <string>
 
 namespace Graphics
 {

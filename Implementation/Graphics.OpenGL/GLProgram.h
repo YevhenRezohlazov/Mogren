@@ -2,6 +2,7 @@
 
 #include "GLResource.h"
 #include <unordered_map>
+#include <string>
 
 namespace Graphics
 {
