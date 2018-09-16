@@ -49,9 +49,10 @@ namespace Localization
         /// Returns localized string from the array with the specified key or the key string if no localization is found.
         /// \param key Localized string array key
         /// \param index Zero-based string index in the array
-        /// TODO: Not supported now.
         ///
         ParametrizedString getString(const std::string& key, uint32_t index);
+
+        std::vector<ParametrizedString> getStrings(const std::string& key);
 
     protected:
         virtual void finalize() override;

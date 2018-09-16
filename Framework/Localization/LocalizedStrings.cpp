@@ -60,6 +60,23 @@ namespace Localization
         return L"#WRONG_STRING_KEY#";
     }
 
+    std::vector<LocalizedStrings::ParametrizedString> LocalizedStrings::getStrings(const std::string & key)
+    {
+        auto item = mStringArrays.find(key);
+
+        if (item != mStringArrays.end())
+        {
+            std::vector<LocalizedStrings::ParametrizedString> res;
+            res.reserve(item->second.size());
+            for (const auto & str : item->second) res.push_back(str);
+            return res;
+        }
+
+        Logging::Logger::writeError("Cannot find localized string for key \"%s\".", key.c_str());
+        assert(false && "#WRONG_STRING_KEY#");
+        return{ L"#WRONG_STRING_KEY#" };
+    }
+
     void LocalizedStrings::finalize()
     {
     }
