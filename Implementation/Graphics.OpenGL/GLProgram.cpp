@@ -2,7 +2,7 @@
 #include <Mogren/Framework/Logging/Logger.h>
 
 #ifdef __ANDROID__
-#define SHADERS_VERSION_STRING ""
+#define SHADERS_VERSION_STRING "#version 100\n"
 #else
 #define SHADERS_VERSION_STRING "#version 400\n"
 #endif
