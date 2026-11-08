@@ -45,7 +45,7 @@ namespace Input
         /// Adds touch event with given parameters to the touch queue.
         /// Can be called from any thread
         /// \param renderTarget Render target to be touched
-        /// \param action Touch action (Up/Down/Move)
+        /// \param action Touch action (Up/Down/Move/Cancel)
         /// \param position The touch position
         /// \param pointerId Id of the pointer that touches the render target
         /// \param touchTime Absolute time of the touch event
@@ -91,4 +91,3 @@ namespace Input
             const Math::Point3DF &farScreenPosition);
     };
 }
-

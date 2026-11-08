@@ -57,6 +57,8 @@ namespace Common
 
         AAssetManager* getAssetManager();
 
+        static void requestBackButtonPress();
+
 	private:
         void callVoidJavaMethod(const std::string & methodName);
 
@@ -85,4 +87,3 @@ namespace Common
         std::function<void() > mResumeCallback;
     };
 }
-

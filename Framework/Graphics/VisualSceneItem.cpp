@@ -11,6 +11,7 @@
 namespace Graphics
 {
     VisualSceneItem::VisualSceneItem()
+        : mVisible(true)
     {
     }
 
@@ -44,8 +45,18 @@ namespace Graphics
         mGeometry = geometry;
     }
 
+    void VisualSceneItem::setVisible(bool visible)
+    {
+        mVisible = visible;
+    }
+
     void VisualSceneItem::render(const Camera & camera)
     {
+        if (!mVisible)
+        {
+            return;
+        }
+
         if (mGeometry == nullptr || mShader == nullptr)
         {
             return;

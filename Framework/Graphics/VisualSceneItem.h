@@ -42,6 +42,8 @@ namespace Graphics
         ///
         void setGeometry(const std::shared_ptr<Geometry> & geometry);
 
+        virtual void setVisible(bool visible);
+
         ///
         /// Renders the visual scene item
         ///
@@ -52,6 +54,6 @@ namespace Graphics
     private:
         std::shared_ptr<Shader> mShader;
         std::shared_ptr<Geometry> mGeometry;
+        bool mVisible;
     };
 }
-

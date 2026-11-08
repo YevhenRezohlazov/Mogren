@@ -9,7 +9,7 @@ namespace Common
     {
         Down,
         Move,
-        Up
+        Up,
+        Cancel
     };
 }
-

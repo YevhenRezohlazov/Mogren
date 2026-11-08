@@ -36,6 +36,8 @@ namespace Input
 
         for (auto& elem : mTouchQueue)
         {
+            touchDispatched = false;
+
             // ignore Move and Up events if no input box is focused
             if (mFocusedTouchCount == 0 && elem.mAction != TouchAction::Down) continue;
 
@@ -77,7 +79,11 @@ namespace Input
                 }
             }
 
-            if (!touchDispatched)
+            if (elem.mAction == TouchAction::Cancel)
+            {
+                clearCapture();
+            }
+            else if (!touchDispatched)
             {
                 if (mFocusedInputBox != nullptr && elem.mAction == TouchAction::Up)
                 {

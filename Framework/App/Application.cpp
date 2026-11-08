@@ -11,6 +11,7 @@
 #include <Mogren/Framework/Graphics/Text/FontLoader.h>
 #include <Mogren/Framework/Audio/SoundLoader.h>
 #include <Mogren/Framework/Localization/LocalizedStringsLoader.h>
+#include <Mogren/Framework/Logging/Logger.h>
 #include <assert.h>
 
 namespace App
@@ -116,6 +117,21 @@ namespace App
 
     void Application::prerender()
     {
+        const auto screenSize = Common::getImpl<Common::NativeCoreInterface>().getScreenSize();
+        if (screenSize.width > 0 && screenSize.height > 0
+            && mDisplayRenderTarget->getSize() != screenSize)
+        {
+            Logging::Logger::writeInfo(
+                "Display surface resized to %dx%d", screenSize.width, screenSize.height);
+            auto resizedRenderTarget = std::make_shared<Graphics::RenderTarget>(
+                Common::getImpl<Graphics::NativeGraphicsInterface>().createDisplayRenderTarget());
+            while (!mDisplayRenderTarget->getAttachedCameras().empty())
+            {
+                mDisplayRenderTarget->getAttachedCameras().back().get().setRenderTarget(resizedRenderTarget);
+            }
+            mDisplayRenderTarget = std::move(resizedRenderTarget);
+        }
+
         getResourceManager().finalizeResources();
         if (mBackButtonPressed.exchange(false)) onBackButtonPress();
         Input::InputManager::dispatchTouches();

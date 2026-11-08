@@ -1,12 +1,13 @@
-cmake_minimum_required(VERSION 3.6)
+cmake_minimum_required(VERSION 3.21)
 
 project(Mogren)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/..)
 
-set(CMAKE_CXX_STANDARD 14)
-
-if (ANDROID)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -fexceptions -frtti -D__ANDROID__")
+if(ANDROID)
+	set(CMAKE_CXX_STANDARD 14)
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions -frtti -D__ANDROID__")
+else()
+	set(CMAKE_CXX_STANDARD 17)
 endif()
 
 add_definitions(-D_UNICODE -DUNICODE)
@@ -116,7 +117,7 @@ list(APPEND SRC_LIST ${SRC_LIST_TMP})
 file(GLOB SRC_LIST_TMP "ThirdParty/utf8/utf8/*.[ch]" "ThirdParty/utf8/utf8/*.[ch]pp")
 list(APPEND SRC_LIST ${SRC_LIST_TMP})
 
-if (ANDROID_NDK)
+if(ANDROID)
 	file(GLOB SRC_LIST_TMP "Implementation/Core.Android/*.[ch]" "Implementation/Core.Android/*.[ch]pp")
 	list(APPEND SRC_LIST ${SRC_LIST_TMP})
 	file(GLOB SRC_LIST_TMP "Implementation/Logging.Android/*.[ch]" "Implementation/Logging.Android/*.[ch]pp")
@@ -156,10 +157,16 @@ elseif(UNIX)
 endif()
 
 add_library(Mogren STATIC ${SRC_LIST})
-target_include_directories(Mogren PRIVATE
-                           ${ANDROID_NDK}/sources/android/native_app_glue)
-
-if (ANDROID_NDK)						   
+if(ANDROID)
+	set(NATIVE_APP_GLUE "${CMAKE_ANDROID_NDK}/sources/android/native_app_glue")
+	if(NOT EXISTS "${NATIVE_APP_GLUE}/android_native_app_glue.h")
+		message(FATAL_ERROR "Android native_app_glue was not found in ${CMAKE_ANDROID_NDK}")
+	endif()
+	target_include_directories(Mogren PRIVATE "${NATIVE_APP_GLUE}")
 	add_subdirectory(ThirdParty/openal.android)
-	target_link_libraries(Mogren openal)
+	target_link_libraries(Mogren PUBLIC openal)
+elseif(WIN32)
+	target_include_directories(Mogren PRIVATE
+		"${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty/freeglut/include"
+		"${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty/openal.windows/include")
 endif()

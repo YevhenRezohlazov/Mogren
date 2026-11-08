@@ -17,8 +17,6 @@ std::unique_ptr<App::Application> createApplication();
 void android_main(android_app* state)
 {
     // Make sure glue isn't stripped.
-    app_dummy();
-
     Common::ImplementationHolder<Common::NativeCoreInterface> coreImplHolder(
             std::make_unique<Common::AndroidCoreImpl>());
     Common::ImplementationHolder<ResourceManagement::NativeResourceManager>resManImplHolder(

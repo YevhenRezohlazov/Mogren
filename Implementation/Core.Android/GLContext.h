@@ -93,6 +93,7 @@ class GLContext {
 
   void Suspend();
   EGLint Resume(ANativeWindow* window);
+  void RefreshSurfaceSize();
 
   ANativeWindow* GetANativeWindow(void) const { return window_; };
   int32_t GetScreenWidth() const { return screen_width_; }

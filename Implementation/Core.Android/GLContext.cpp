@@ -234,6 +234,22 @@ void GLContext::Suspend() {
   }
 }
 
+void GLContext::RefreshSurfaceSize() {
+  if (surface_ == EGL_NO_SURFACE) return;
+
+  EGLint width, height;
+  if (!eglQuerySurface(display_, surface_, EGL_WIDTH, &width)
+      || !eglQuerySurface(display_, surface_, EGL_HEIGHT, &height)) {
+    Logger::writeError("Could not query resized Android surface: EGL error %d", eglGetError());
+    return;
+  }
+
+  if (width > 0 && height > 0) {
+    screen_width_ = width;
+    screen_height_ = height;
+  }
+}
+
 bool GLContext::Invalidate() {
   Terminate();
 

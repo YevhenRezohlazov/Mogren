@@ -4,12 +4,16 @@
 #include <cassert>
 #include <android/native_activity.h>
 #include <android/window.h>
+#include <jni.h>
 #include <time.h>
+#include <atomic>
 
 namespace Common
 {
     namespace
     {
+        std::atomic<bool> backButtonPressPending{false};
+
         double getCurrentTime()
         {
             timespec ts;
@@ -26,6 +30,11 @@ namespace Common
 	AndroidCoreImpl::~AndroidCoreImpl()
 	{
 	}
+
+    void AndroidCoreImpl::requestBackButtonPress()
+    {
+        backButtonPressPending.store(true, std::memory_order_release);
+    }
 
     void AndroidCoreImpl::setInitializationCallback(std::function<void()> callback)
     {
@@ -176,7 +185,7 @@ namespace Common
             // If not animating, we will block forever waiting for events.
             // If animating, we loop until all events are read, then continue
             // to draw the next frame of animation.
-            while (ALooper_pollAll(mDrawing ? 0 : -1, NULL, &events, (void**)&source) >= 0)
+            while (ALooper_pollOnce(mDrawing ? 0 : -1, NULL, &events, (void**)&source) >= 0)
             {
                 // Process this event.
                 if (source != NULL)
@@ -271,6 +280,10 @@ namespace Common
             case APP_CMD_CONFIG_CHANGED:
                 Logging::Logger::writeInfo("ANDROID COMMAND APP_CMD_CONFIG_CHANGED");
                 break;
+            case APP_CMD_WINDOW_RESIZED:
+            case APP_CMD_CONTENT_RECT_CHANGED:
+                that->mGLContext->RefreshSurfaceSize();
+                break;
         }
     }
 
@@ -294,12 +307,19 @@ namespace Common
             case AMOTION_EVENT_ACTION_MOVE:
                 that->mTouchInputCallback(Common::TouchAction::Move, coords, 0);
                 return 1;
+            case AMOTION_EVENT_ACTION_CANCEL:
+                that->mTouchInputCallback(Common::TouchAction::Cancel, coords, 0);
+                return 1;
             }
         }
         case AINPUT_EVENT_TYPE_KEY:
             if (AKeyEvent_getKeyCode(event) == AKEYCODE_BACK)
             {
-                that->mBackButtonCallback();
+                if (AKeyEvent_getAction(event) == AKEY_EVENT_ACTION_DOWN
+                    && AKeyEvent_getRepeatCount(event) == 0)
+                {
+                    backButtonPressPending.store(true, std::memory_order_release);
+                }
                 return 1;
             }
             break;
@@ -310,6 +330,11 @@ namespace Common
 
     void AndroidCoreImpl::render()
     {
+        if (mBackButtonCallback && backButtonPressPending.exchange(false, std::memory_order_acq_rel))
+        {
+            mBackButtonCallback();
+        }
+
         mRenderCallback();
 
         if (EGL_SUCCESS != mGLContext->Swap()) {
@@ -384,4 +409,14 @@ namespace Common
     void AndroidCoreImpl::showVideoAd() {
         callVoidJavaMethod("showVideoAd");
     }
+}
+
+#ifndef MOGREN_ANDROID_BACK_BUTTON_JNI_METHOD
+#error "Define the Android activity back-button JNI method for this application."
+#endif
+
+extern "C" JNIEXPORT void JNICALL
+MOGREN_ANDROID_BACK_BUTTON_JNI_METHOD(JNIEnv*, jclass)
+{
+    Common::AndroidCoreImpl::requestBackButtonPress();
 }
