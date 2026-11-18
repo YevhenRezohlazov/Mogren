@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <cstddef>
 #include <mutex>
 #include <vector>
 #include <unordered_map>
@@ -149,6 +150,9 @@ namespace ResourceManagement
             using tLoadedResourcesList = std::vector<std::shared_ptr<Resource>>;
             std::future<tLoadedResourcesList> future;
             std::function<void()> callback;
+            tLoadedResourcesList loadedResources;
+            std::size_t nextResourceToFinalize = 0;
+            bool isReadyToFinalize = false;
         };
 
         std::vector<ResourcesLoadingFutureData> mResourcesLoadingFutures;

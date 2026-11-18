@@ -131,22 +131,56 @@ namespace ResourceManagement
 
     void ResourceManager::finalizeResources()
     {
+        using Clock = std::chrono::steady_clock;
+        constexpr auto FINALIZATION_BUDGET = std::chrono::milliseconds(4);
+        const auto finalizeStart = Clock::now();
+        std::size_t finalizedCount = 0;
+
         for (int i = mResourcesLoadingFutures.size() - 1; i >= 0; --i)
         {
             using namespace std::chrono_literals;
             auto & futData = mResourcesLoadingFutures[i];
-            if (futData.future.wait_for(0s) == std::future_status::ready)
+            if (!futData.isReadyToFinalize)
             {
-                auto loadedResources = futData.future.get();
-                for (auto & loadedRes : loadedResources)
-                {
-                    if (loadedRes != nullptr)
-                        loadedRes->finalize();
-                }
+                if (futData.future.wait_for(0s) != std::future_status::ready)
+                    continue;
 
-                futData.callback();
-                mResourcesLoadingFutures.erase(mResourcesLoadingFutures.cbegin() + i);
+                futData.loadedResources = futData.future.get();
+                futData.isReadyToFinalize = true;
             }
+
+            while (futData.nextResourceToFinalize < futData.loadedResources.size())
+            {
+                auto & loadedRes = futData.loadedResources[futData.nextResourceToFinalize++];
+                if (loadedRes != nullptr)
+                {
+                    loadedRes->finalize();
+                }
+                ++finalizedCount;
+
+                if (Clock::now() - finalizeStart >= FINALIZATION_BUDGET)
+                    break;
+            }
+
+            if (futData.nextResourceToFinalize == futData.loadedResources.size())
+            {
+                auto callback = std::move(futData.callback);
+                mResourcesLoadingFutures.erase(mResourcesLoadingFutures.cbegin() + i);
+                if (callback)
+                    callback();
+            }
+
+            if (Clock::now() - finalizeStart >= FINALIZATION_BUDGET)
+                break;
+        }
+
+        const auto finalizeDuration = std::chrono::duration_cast<std::chrono::milliseconds>(
+            Clock::now() - finalizeStart).count();
+        if (finalizeDuration >= 16)
+        {
+            Logging::Logger::writeWarning(
+                "Resource finalization took %lld ms for %u resources in one frame.",
+                static_cast<long long>(finalizeDuration), static_cast<unsigned>(finalizedCount));
         }
     }
 
@@ -286,11 +320,16 @@ namespace ResourceManagement
         }
         else
         {
+            Logging::Logger::writeInfo(
+                "Starting resource load for %s (%u resources).",
+                path.c_str(), static_cast<unsigned>(resourcesToLoad.size()));
+
             auto resLoadingFuture = std::async(
                 std::launch::async,
-                [this, resourcesToLoad]()
+                [this, resourcesToLoad, path]()
                 {
                     DECLARE_FUNCTION_LOGGING_GUARD();
+                    const auto loadStart = std::chrono::steady_clock::now();
 
                     ResourcesLoadingFutureData::tLoadedResourcesList loadedResList;
                     loadedResList.reserve(resourcesToLoad.size());
@@ -301,10 +340,20 @@ namespace ResourceManagement
                         loadedResList.push_back(loadResource(*i));
                     }
 
+                    const auto loadDuration = std::chrono::duration_cast<std::chrono::milliseconds>(
+                        std::chrono::steady_clock::now() - loadStart).count();
+                    Logging::Logger::writeInfo(
+                        "Loaded %u resources for %s in %lld ms.",
+                        static_cast<unsigned>(loadedResList.size()), path.c_str(),
+                        static_cast<long long>(loadDuration));
+
                     return loadedResList;
                 });
 
-            mResourcesLoadingFutures.push_back({ std::move(resLoadingFuture), std::move(callback) });
+            ResourcesLoadingFutureData futureData;
+            futureData.future = std::move(resLoadingFuture);
+            futureData.callback = std::move(callback);
+            mResourcesLoadingFutures.push_back(std::move(futureData));
         }
     }
 
