@@ -252,25 +252,19 @@ def _process_font(source: Path) -> bytes:
         advance = font.getlength(character)
         if character == " ":
             container_width = max(1, math.ceil(advance))
-            region = (0, 0, container_width, container_height)
+            bearing = 0.0
         else:
-            bounds = font.getbbox(character, anchor="ls", stroke_width=stroke_width)
-            left, top, right, bottom = bounds
             container_width = max(
                 1,
                 math.ceil(advance + 2 * (side_bearing + stroke_width)),
             )
-            region = (
-                left + side_bearing + stroke_width,
-                top + ascent,
-                max(0, right - left),
-                max(0, bottom - top),
-            )
+            bearing = side_bearing + stroke_width
         characters.append({
             "char": character,
             "width": container_width,
             "height": container_height,
-            "region": region,
+            "advance": advance,
+            "bearing": bearing,
             "position": (0, 0),
         })
 
@@ -323,7 +317,6 @@ def _process_font(source: Path) -> bytes:
     output.extend(struct.pack("<fI", font_height / atlas_height, len(characters)))
     for char in characters:
         px, py = char["position"]
-        left, top, region_width, region_height = char["region"]
         output.extend(struct.pack(
             "<H8f",
             ord(str(char["char"])),
@@ -331,10 +324,10 @@ def _process_font(source: Path) -> bytes:
             py / atlas_height,
             int(char["width"]) / atlas_width,
             int(char["height"]) / atlas_height,
-            (px + int(left)) / atlas_width,
-            (py + int(top)) / atlas_height,
-            int(region_width) / atlas_width,
-            int(region_height) / atlas_height,
+            float(char["bearing"]) / atlas_width,
+            0.0,
+            float(char["advance"]) / atlas_width,
+            font_height / atlas_height,
         ))
     encoded_map = _encode_mpng(atlas, no_mipmaps)
     output.extend(struct.pack("<I", len(encoded_map)))
