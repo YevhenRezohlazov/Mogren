@@ -279,16 +279,6 @@ namespace Common
         // do nothing on windows
     }
 
-    void WindowsCoreImpl::showInterstitialAd()
-    {
-        // Not implemented
-    }
-
-    void WindowsCoreImpl::showVideoAd()
-    {
-        // Not implemented
-    }
-
     void WindowsCoreImpl::openUrl(const std::string & url)
     {
         ShellExecuteA(0, 0, url.c_str(), 0, 0, SW_SHOW);

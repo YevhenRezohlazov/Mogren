@@ -115,11 +115,6 @@ namespace Common
             jvm->DetachCurrentThread();
     }
 
-    void AndroidCoreImpl::showInterstitialAd()
-    {
-        callVoidJavaMethod("showInterstitialAd");
-    }
-
     void AndroidCoreImpl::openUrl(const std::string & url)
     {
         auto jvm = mAndroidApp->activity->vm;
@@ -373,42 +368,6 @@ namespace Common
                 keep ? 0 : AWINDOW_FLAG_KEEP_SCREEN_ON);
     }
 
-    void AndroidCoreImpl::callVoidJavaMethod(const std::string &methodName)
-    {
-        auto jvm = mAndroidApp->activity->vm;
-        assert(jvm);
-
-        JNIEnv *jniEnv = nullptr;
-
-        bool attached = false;
-        switch (jvm->GetEnv((void**)&jniEnv, JNI_VERSION_1_6))
-        {
-            case JNI_OK:
-                break;
-            case JNI_EDETACHED:
-                if (jvm->AttachCurrentThread(&jniEnv, nullptr)!=0)
-                {
-                    assert("Could not attach current thread");
-                }
-                attached = true;
-                break;
-            case JNI_EVERSION:
-                assert("Invalid java version");
-                return;
-        }
-
-        assert(jniEnv);
-        jclass activityClass = jniEnv->GetObjectClass(mAndroidApp->activity->clazz);
-        jmethodID methodId = jniEnv->GetMethodID(activityClass, methodName.c_str(), "()V");
-        jniEnv->CallVoidMethod(mAndroidApp->activity->clazz, methodId);
-
-        if (attached)
-            jvm->DetachCurrentThread();
-    }
-
-    void AndroidCoreImpl::showVideoAd() {
-        callVoidJavaMethod("showVideoAd");
-    }
 }
 
 #ifndef MOGREN_ANDROID_BACK_BUTTON_JNI_METHOD
